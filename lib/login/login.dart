@@ -1,4 +1,7 @@
-import 'package:diabetes_app/medicine/medicine_api.dart';
+import 'package:diabetes_app/loading.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'login_api.dart';
 import 'package:diabetes_app/login/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +21,32 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordController = new TextEditingController();
   AuthMode _authMode = AuthMode.Login;
 
+  bool loading = false;
+
   User _user = User();
+
+  login(User user, AuthNotifier authNotifier) async {
+    AuthResult authResult = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: user.email, password: user.password)
+        .catchError((error) => print(error.code));
+
+
+
+    if (authResult != null) {
+      FirebaseUser firebaseUser = authResult.user;
+
+      if (firebaseUser != null) {
+        print("Log In: $firebaseUser");
+        authNotifier.setUser(firebaseUser);
+      }
+    }else
+      {
+        setState(() => loading = false);
+      }
+  }
+
+
+
 
   @override
   void initState() {
@@ -31,6 +59,7 @@ class _LoginState extends State<Login> {
     if (!_formKey.currentState.validate()) {
       return;
     }
+    setState(() => loading = true);
 
     _formKey.currentState.save();
 
@@ -188,9 +217,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    print("Building login screen");
-
-    return Scaffold(
+    return loading? Loading(): Scaffold(
       body: Container(
         color: Colors.white,
         constraints: BoxConstraints.expand(
