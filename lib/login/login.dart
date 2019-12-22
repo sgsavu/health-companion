@@ -17,20 +17,19 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = new TextEditingController();
+
   AuthMode _authMode = AuthMode.Login;
-
   bool loading = false;
-
   User _user = User();
 
   login(User user, AuthNotifier authNotifier) async {
+
     AuthResult authResult = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: user.email, password: user.password)
         .catchError((error) => print(error.code));
-
-
 
     if (authResult != null) {
       FirebaseUser firebaseUser = authResult.user;
@@ -51,12 +50,13 @@ class _LoginState extends State<Login> {
         .catchError((error) => print(error.code));
 
     if (authResult != null) {
+
       UserUpdateInfo updateInfo = UserUpdateInfo();
       updateInfo.displayName = user.displayName;
-
       FirebaseUser firebaseUser = authResult.user;
 
       if (firebaseUser != null) {
+      
         await firebaseUser.updateProfile(updateInfo);
 
         await firebaseUser.reload();
@@ -70,7 +70,6 @@ class _LoginState extends State<Login> {
       setState(() => loading = false);
     }
   }
-
 
   @override
   void initState() {
@@ -122,7 +121,7 @@ class _LoginState extends State<Login> {
         }
 
         if (value.length < 3 || value.length > 12) {
-          return 'Display Name must be betweem 5 and 12 characters';
+          return 'Display Name must be betweem 3 and 12 characters';
         }
 
         return null;
