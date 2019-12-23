@@ -30,7 +30,7 @@ class NotificationTile extends StatelessWidget {
                   Text(
                     notification.title,
                     style: textTheme.title.copyWith(
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   smallHeight,
@@ -52,6 +52,7 @@ class NotificationTile extends StatelessWidget {
                       Text(
                         'Every day',
                         style: textTheme.headline.copyWith(
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.grey.shade800,
                         ),

@@ -152,7 +152,7 @@ class _DietTabState extends State<DietTab>{
                     child: Text(
                       'Search',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 22.0,
                         fontWeight: FontWeight.w600,
                       ),

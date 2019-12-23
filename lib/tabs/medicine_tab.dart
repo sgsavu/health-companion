@@ -29,6 +29,7 @@ class _MedicineTabState extends State<MedicineTab>{
 
     return Scaffold(
       body: ListView.builder(
+        itemCount: medicineNotifier.medicineList.length,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
               onTap: () async {
@@ -103,9 +104,9 @@ class _MedicineTabState extends State<MedicineTab>{
               )
           );
         },
-        itemCount: medicineNotifier.medicineList.length,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blueAccent,
         onPressed: () {
           medicineNotifier.currentMedicine = null;
           Navigator.of(context)

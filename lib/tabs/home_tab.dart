@@ -66,27 +66,29 @@ class _HomeTabState extends State<HomeTab> {
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Image.network(
-            'https://cuteiphonewallpaper.com/wp-content/uploads/2019/06/iPhone-X-Home-Screen-Wallpaper.jpg',
+          /*Image.network(
+            '',
             fit: BoxFit.cover,
-          ),
+          ),*/
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
                 backgroundColor: Colors.white.withOpacity(0.0),
-                iconTheme: IconThemeData(color: Colors.white),
+                iconTheme: IconThemeData(color: Colors.black),
                 elevation: 0.0,
                 title: Text(
                   "Welcome back, ${authNotifier.user != null ? authNotifier.user.displayName : "Feed"}!",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
+                centerTitle: true,
                 bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(150.0),
                     child: Column(children: <Widget>[
                       Container(
+
                         margin: EdgeInsets.only(
                           left: 0,
                           top: 0,
@@ -95,6 +97,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                         alignment: Alignment.center,
                         child: FloatingActionButton.extended(
+                          backgroundColor: Colors.blueAccent,
                           icon: Icon(Icons.done_outline),
                           label: Text('Take medicine'),
                           onPressed: () {
@@ -106,12 +109,12 @@ class _HomeTabState extends State<HomeTab> {
                       Text(
                         'Medicine Intake History',
                         style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 13,
                             fontWeight: FontWeight.w900),
                       ),
                       Divider(
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ]))),
             drawer: Drawer(
@@ -157,7 +160,7 @@ class _HomeTabState extends State<HomeTab> {
                         horizontal: 15.0,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.blueAccent,
                         borderRadius: BorderRadius.circular(10.0),
                         boxShadow: [
                           BoxShadow(
@@ -175,12 +178,14 @@ class _HomeTabState extends State<HomeTab> {
                                 recordNotifier.recordList[index].createdAt
                                     .toDate()),
                             style: TextStyle(
+                              color: Colors.white,
                                 fontWeight: FontWeight.w700, fontSize: 15),
                           ),
                           Text(
                             'Medicine Intake',
                             style: TextStyle(
                               fontSize: 15.0,
+                                color: Colors.white,
                             ),
                           ),
                         ],

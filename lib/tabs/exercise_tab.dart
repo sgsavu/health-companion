@@ -11,8 +11,10 @@ class _ExerciseTabState extends State<ExerciseTab>{
   @override
   Widget build(BuildContext context) {
 
-    return Center(
-      child: Text('yo'),
+    return Scaffold(
+      body: Center(
+        child: Text('yo'),
+      )
     );
 
   }

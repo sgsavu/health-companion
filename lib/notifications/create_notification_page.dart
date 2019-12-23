@@ -1,8 +1,11 @@
+import 'package:diabetes_app/medicine/medicine.dart';
+import 'package:diabetes_app/medicine/medicine_api.dart';
+import 'package:diabetes_app/medicine/medicine_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'notification_data.dart';
-import '../custom_input_field.dart';
 
 class CreateNotificationPage extends StatefulWidget {
   @override
@@ -10,67 +13,118 @@ class CreateNotificationPage extends StatefulWidget {
 }
 
 class _CreateNotificationPageState extends State<CreateNotificationPage> {
-
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
   TimeOfDay selectedTime = TimeOfDay.now();
-  final _formKey = GlobalKey<FormState>();
+
+  List<DropdownMenuItem<Medicine>> _dropdownMenuItems;
+  Medicine _selectedCompany;
+
+  @override
+  void initState() {
+    MedicineNotifier medicineNotifier =
+        Provider.of<MedicineNotifier>(context, listen: false);
+    getMedicine(medicineNotifier);
+    super.initState();
+  }
+
+  buildDropDownMenuItems(List medicine) {
+    List<DropdownMenuItem<Medicine>> items = List();
+    print(medicine);
+    for (Medicine medicine in medicine) {
+      items.add(DropdownMenuItem(
+        value: medicine,
+        child: Text(medicine.name),
+      ));
+    }
+    print('to');
+    print(items);
+    return items;
+  }
+
+  onChangeDropdownItem(Medicine selectedCompany) {
+    setState(() {
+      _selectedCompany = selectedCompany;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    MedicineNotifier medicineNotifier = Provider.of<MedicineNotifier>(context);
+    _dropdownMenuItems = buildDropDownMenuItems(medicineNotifier.medicineList);
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Create Notification',style: TextStyle(
-          color: Colors.blue
-        ),),
+        title: Text(
+          'Create Notification',
+          style: TextStyle(color: Colors.blue),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child:Column(
+          child: Container(
+        height: 180.0,
+        margin: EdgeInsets.all(20.0),
+        padding: EdgeInsets.symmetric(
+          horizontal: 15.0,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0, 2),
+              blurRadius: 6.0,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(
-                padding: const EdgeInsets.all(8),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Select time to schedule:',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+                OutlineButton(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 30),
+                  onPressed: selectTime,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      CustomInputField(
-                        controller: _titleController,
-                        hintText: 'Title',
-                        inputType: TextInputType.text,
-                        autoFocus: true,
-                      ),
-                      SizedBox(height: 12),
-                      CustomInputField(
-                        controller: _descriptionController,
-                        hintText: 'Description',
-                        inputType: TextInputType.text,
-                        autoFocus: true,
-                      ),
-                      SizedBox(height: 12),
-                      OutlineButton(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 30),
-                        onPressed: selectTime,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Icon(Icons.access_time),
-                            SizedBox(width: 4),
-                            Text(selectedTime.format(context)),
-                          ],
-                        ),
-                      ),
+                      Icon(Icons.access_time),
+                      SizedBox(width: 4),
+                      Text(selectedTime.format(context)),
                     ],
                   ),
                 ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Select medicine to schedule:',
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            OutlineButton(
+              child: DropdownButton(
+                value: _selectedCompany,
+                items: _dropdownMenuItems,
+                onChanged: onChangeDropdownItem,
               ),
-
+            ),
           ],
         ),
-      ),
+      )),
       floatingActionButton: FloatingActionButton(
         onPressed: createNotification,
         child: Icon(Icons.add_alarm),
@@ -91,13 +145,13 @@ class _CreateNotificationPageState extends State<CreateNotificationPage> {
   }
 
   void createNotification() {
-    if (_formKey.currentState.validate()) {
-      final title = _titleController.text;
-      final description = _descriptionController.text;
+
+      final title = 'Medicine Intake Reminder';
+      final description = 'Hi, it is time to take your ${_selectedCompany.name}.';
       final time = Time(selectedTime.hour, selectedTime.minute);
 
       final notificationData = NotificationData(title, description, time);
       Navigator.of(context).pop(notificationData);
-    }
+
   }
 }

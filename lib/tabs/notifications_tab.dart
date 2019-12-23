@@ -69,9 +69,11 @@ class _NotificationsTabState extends State<NotificationsTab>{
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.blueAccent,
         onPressed: navigateToNotificationCreation,
-        child: Icon(Icons.notifications),
+        icon: Icon(Icons.notifications),
+        label: Text('Add reminder'),
       ),
     );
 
