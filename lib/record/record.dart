@@ -5,6 +5,7 @@ class Record {
 
   String id;
   String name;
+  String type;
   Timestamp createdAt;
 
   Record();
@@ -14,6 +15,7 @@ class Record {
 
     id = data['id'];
     name = data['name'];
+    type = data['type'];
     createdAt = data['createdAt'];
 
 
@@ -23,6 +25,7 @@ class Record {
     return{
       'id':id,
       'name':name,
+      'type':type,
       'createdAt':createdAt,
 
     };

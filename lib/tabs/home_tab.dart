@@ -1,5 +1,8 @@
 import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/login/login_api.dart';
+import 'package:diabetes_app/medicine/medicine.dart';
+import 'package:diabetes_app/medicine/medicine_api.dart';
+import 'package:diabetes_app/medicine/medicine_notifier.dart';
 import 'package:diabetes_app/record/record_api.dart';
 import 'package:diabetes_app/record/record_notifier.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +16,43 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  List<DropdownMenuItem<Medicine>> _dropdownMenuItems;
+  Medicine _selectedCompany;
+  bool canShow = false;
+
   @override
   void initState() {
     RecordNotifier recordNotifier =
         Provider.of<RecordNotifier>(context, listen: false);
     getRecord(recordNotifier);
+
+    MedicineNotifier medicineNotifier =
+        Provider.of<MedicineNotifier>(context, listen: false);
+    getMedicine(medicineNotifier);
+
     super.initState();
+  }
+
+  buildDropDownMenuItems(List medicine) {
+    List<DropdownMenuItem<Medicine>> items = List();
+    print(medicine);
+    for (Medicine medicine in medicine) {
+      items.add(DropdownMenuItem(
+        value: medicine,
+        child: Text(medicine.name),
+      ));
+    }
+    print('to');
+    print(items);
+    return items;
+  }
+
+  onChangeDropdownItem(Medicine selectedCompany) {
+    print('brobrobro');
+    setState(() {
+      _selectedCompany = selectedCompany;
+      canShow=true;
+    });
   }
 
   createAlertDialog(BuildContext context, AuthNotifier authNotifier,
@@ -28,11 +62,9 @@ class _HomeTabState extends State<HomeTab> {
         builder: (context) {
           return AlertDialog(
             title: Text('Medicine Intake History'),
-            content:
-                Container(
-                  child:Text(
-                      'Are you sure you want to create a database record of your medicine intake at the current time? \nPlease make sure that this is the right time for you to take your medication as this action cannot be revoked.\nThis information is shared with your GP for your own safety.\nIf you\'ve added an entry by mistake please contact your GP to avoid any confusion.\n'),
-                ),
+            content: Container(
+              child: Text('Are you sure you want to create a database record of your medicine intake at the current time? \nPlease make sure that this is the right time for you to take your medication as this action cannot be revoked.\nThis information is shared with your GP for your own safety.\nIf you\'ve added an entry by mistake please contact your GP to avoid any confusion.\n'),
+            ),
             actions: <Widget>[
               FlatButton(
                 child: Text('No'),
@@ -47,10 +79,33 @@ class _HomeTabState extends State<HomeTab> {
                   Navigator.pop(context);
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return RecordForm(bro: authNotifier.user.displayName);
+                    return RecordForm(
+                        bro: authNotifier.user.displayName,
+                        type: _selectedCompany.name);
                   }));
                 },
               )
+            ],
+          );
+        });
+  }
+
+  createAlertDialog2(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Medicine Intake History'),
+            content: Container(
+              child: Text('No medicine selected.Please make sure you choose any of the avaialble medications to record.\n'),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ],
           );
         });
@@ -61,6 +116,9 @@ class _HomeTabState extends State<HomeTab> {
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
     RecordNotifier recordNotifier = Provider.of<RecordNotifier>(context);
+
+    MedicineNotifier medicineNotifier = Provider.of<MedicineNotifier>(context);
+    _dropdownMenuItems = buildDropDownMenuItems(medicineNotifier.medicineList);
 
     return Container(
       child: Stack(
@@ -85,15 +143,49 @@ class _HomeTabState extends State<HomeTab> {
                 ),
                 centerTitle: true,
                 bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(150.0),
+                    preferredSize: const Size.fromHeight(200.0),
                     child: Column(children: <Widget>[
+                      canShow?Container():Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: Text('Step 1: Select medicine to intake:',style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),),
+                      ),
+                      OutlineButton(
+                        child: DropdownButton(
+                          value: _selectedCompany,
+                          items: _dropdownMenuItems,
+                          onChanged: onChangeDropdownItem,
+                        ),
+                      ),
+                      canShow?
                       Container(
-
                         margin: EdgeInsets.only(
                           left: 0,
-                          top: 0,
+                          top: 10,
                           right: 0,
-                          bottom: 40,
+                          bottom: 0,
+                        ),
+                        alignment: Alignment.center,
+                        child: Text('Step 2: Click the button below',style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),)
+                      ):Container(
+                        margin: EdgeInsets.only(
+                          left: 0,
+                          top: 10,
+                          right: 0,
+                          bottom: 0,
+                        ),
+                        alignment: Alignment.center,
+                      ),
+                      canShow?
+                      Container(
+                        margin: EdgeInsets.only(
+                          left: 0,
+                          top: 15,
+                          right: 0,
+                          bottom: 15,
                         ),
                         alignment: Alignment.center,
                         child: FloatingActionButton.extended(
@@ -101,10 +193,23 @@ class _HomeTabState extends State<HomeTab> {
                           icon: Icon(Icons.done_outline),
                           label: Text('Take medicine'),
                           onPressed: () {
+
                             createAlertDialog(
-                                context, authNotifier, recordNotifier);
+                                    context, authNotifier, recordNotifier);
+
                           },
                         ),
+                      ):Container(
+                        margin: EdgeInsets.only(
+                          left: 0,
+                          top: 25,
+                          right: 0,
+                          bottom: 5,
+                        ),
+                        alignment: Alignment.center,
+                      ),
+                      Divider(
+                        color: Colors.black,
                       ),
                       Text(
                         'Medicine Intake History',
@@ -150,49 +255,57 @@ class _HomeTabState extends State<HomeTab> {
               itemCount: recordNotifier.recordList.length,
               itemBuilder: (BuildContext context, int index) {
                 return Column(
-                  children: <Widget>[
-                    Container(
-                      height: 40.0,
-                      width: double.infinity,
-                      margin:
+                      children: <Widget>[
+                        Container(
+                          height: 40.0,
+                          width: double.infinity,
+                          margin:
                           EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 15.0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.blueAccent,
-                        borderRadius: BorderRadius.circular(10.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(0, 2),
-                            blurRadius: 6.0,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 15.0,
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            DateFormat('kk:mm | dd-MM-yyyy').format(
-                                recordNotifier.recordList[index].createdAt
-                                    .toDate()),
-                            style: TextStyle(
-                              color: Colors.white,
-                                fontWeight: FontWeight.w700, fontSize: 15),
+                          decoration: BoxDecoration(
+                            color: Colors.blueAccent,
+                            borderRadius: BorderRadius.circular(10.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(0, 2),
+                                blurRadius: 6.0,
+                              ),
+                            ],
                           ),
-                          Text(
-                            'Medicine Intake',
-                            style: TextStyle(
-                              fontSize: 15.0,
-                                color: Colors.white,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                DateFormat('✓  kk:mm | dd-MM-yyyy').format(
+                                    recordNotifier.recordList[index].createdAt
+                                        .toDate()),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15),
+                              ),
+                              Container(
+                                child: Text(
+                                  'Medicine: ${recordNotifier.recordList[index].type}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.white,
+                                  ),
+                                ) ,
+                              )
+
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
+                        ),
+                      ],
+                    );
+
+
               },
             ),
           ),

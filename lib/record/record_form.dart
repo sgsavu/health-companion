@@ -10,8 +10,13 @@ import 'package:provider/provider.dart';
 class RecordForm extends StatefulWidget{
 
   final String bro;
+  final String type;
 
-  RecordForm({@required this.bro});
+  RecordForm({
+
+    @required this.bro,
+    @required this.type
+  });
 
   @override
   _RecordFormState createState() => _RecordFormState();
@@ -32,7 +37,7 @@ class _RecordFormState extends State<RecordForm>{
       _currentRecord = Record();
     }
 
-    uploadRecord(_currentRecord, _onRecordUploaded, widget.bro);
+    uploadRecord(_currentRecord, _onRecordUploaded, widget.bro, widget.type);
   }
 
   _onRecordUploaded(Record record){

@@ -13,6 +13,7 @@ class NotificationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final textTheme = Theme.of(context).textTheme;
     return Card(
       elevation: 6,
@@ -31,6 +32,7 @@ class NotificationTile extends StatelessWidget {
                     notification.title,
                     style: textTheme.title.copyWith(
                       fontWeight: FontWeight.bold,
+                      fontSize: 15,
                     ),
                   ),
                   smallHeight,

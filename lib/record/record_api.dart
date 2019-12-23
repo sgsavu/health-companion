@@ -22,7 +22,7 @@ getRecord(RecordNotifier recordNotifier)async{
   recordNotifier.recordList = _recordList;
 }
 
-uploadRecord(Record record,Function recordUploaded, String name) async{
+uploadRecord(Record record,Function recordUploaded, String name, String type) async{
 
 
 
@@ -35,6 +35,7 @@ uploadRecord(Record record,Function recordUploaded, String name) async{
 
     record.id = documentRef.documentID;
     record.name = name ;
+    record.type = type;
 
     print('uploaded record succesfully: ${record}');
 
