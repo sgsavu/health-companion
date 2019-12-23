@@ -1,6 +1,6 @@
+import 'package:diabetes_app/app.dart';
 import 'package:diabetes_app/notifications/create_notification_page.dart';
 import 'package:diabetes_app/notifications/notification_data.dart';
-import 'package:diabetes_app/notifications/notification_plugin.dart';
 import 'package:diabetes_app/notifications/notification_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -12,14 +12,17 @@ class NotificationsTab extends StatefulWidget {
 
 class _NotificationsTabState extends State<NotificationsTab>{
 
-  final NotificationPlugin _notificationPlugin = NotificationPlugin();
+  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
+
   Future<List<PendingNotificationRequest>> notificationFuture;
 
   @override
   void initState() {
 
     super.initState();
-    notificationFuture = _notificationPlugin.getScheduledNotifications();
+    _initializeNotifications();
+    notificationFuture = getScheduledNotifications();
+
   }
 
 
@@ -76,14 +79,100 @@ class _NotificationsTabState extends State<NotificationsTab>{
   }
 
 
+  Future<void> showWeeklyAtDayAndTime(Time time, Day day, int id, String title, String description) async {
+    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'show weekly channel id',
+      'show weekly channel name',
+      'show weekly description',
+    );
+    final iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    final platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics,
+      iOSPlatformChannelSpecifics,
+    );
+    await _flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
+      id,
+      title,
+      description,
+      day,
+      time,
+      platformChannelSpecifics,
+    );
+  }
+
+  Future<void> showDailyAtTime(Time time, int id, String title, String description) async {
+    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'channel id',
+        'channel name',
+        'channel description',
+        importance: Importance.Max,
+        priority: Priority.High,
+        ticker: 'test ticker'
+    );
+    final iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    final platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics,
+      iOSPlatformChannelSpecifics,
+    );
+    await _flutterLocalNotificationsPlugin.showDailyAtTime(
+      id,
+      title,
+      description,
+      time,
+      platformChannelSpecifics,
+    );
+  }
+
+  Future<List<PendingNotificationRequest>> getScheduledNotifications() async {
+    final pendingNotifications = await _flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    return pendingNotifications;
+  }
+
+  Future cancelNotification(int id) async {
+    await _flutterLocalNotificationsPlugin.cancel(id);
+  }
+
+  bool checkIfIdExists(List<PendingNotificationRequest> notifications, int id) {
+    for (final notification in notifications) {
+      if (notification.id == id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+
+  void _initializeNotifications() {
+    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    final initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+    final initializationSettingsIOS = IOSInitializationSettings();
+    final initializationSettings = InitializationSettings(
+      initializationSettingsAndroid,
+      initializationSettingsIOS,
+    );
+    _flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onSelectNotification: onSelectNotification,
+    );
+  }
+
+  Future onSelectNotification(String payload) async {
+    if (payload != null) {
+      print('notification payload: ' + payload);
+    }
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()
+    ));
+  }
+
   Future<void> dismissNotification(int id) async {
-    await _notificationPlugin.cancelNotification(id);
+    await cancelNotification(id);
     refreshNotification();
   }
 
   void refreshNotification() {
     setState(() {
-      notificationFuture = _notificationPlugin.getScheduledNotifications();
+      notificationFuture = getScheduledNotifications();
     });
   }
 
@@ -95,15 +184,15 @@ class _NotificationsTabState extends State<NotificationsTab>{
     );
     if (notificationData != null) {
       final notificationList =
-      await _notificationPlugin.getScheduledNotifications();
+      await getScheduledNotifications();
       int id = 0;
       for (var i = 0; i < 100; i++) {
-        bool exists = _notificationPlugin.checkIfIdExists(notificationList, i);
+        bool exists = checkIfIdExists(notificationList, i);
         if (!exists) {
           id = i;
         }
       }
-      await _notificationPlugin.showDailyAtTime(
+      await showDailyAtTime(
         notificationData.time,
         id,
         notificationData.title,

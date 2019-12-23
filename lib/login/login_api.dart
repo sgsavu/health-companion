@@ -12,7 +12,6 @@ initializeCurrentUser(AuthNotifier authNotifier) async {
   FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
 
   if (firebaseUser != null) {
-    print(firebaseUser);
     authNotifier.setUser(firebaseUser);
   }
 }
