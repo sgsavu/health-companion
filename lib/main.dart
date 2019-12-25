@@ -1,3 +1,4 @@
+import 'package:diabetes_app/exercises/exercise_notifier.dart';
 import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/app.dart';
 import 'package:diabetes_app/login/login.dart';
@@ -17,6 +18,9 @@ void main() => runApp(MultiProvider(
     ),
     ChangeNotifierProvider(
       builder: (context) => RecordNotifier(),
+    ),
+    ChangeNotifierProvider(
+      builder: (context) => ExerciseNotifier(),
     ),
   ],
   child: MyApp(),

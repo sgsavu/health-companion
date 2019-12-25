@@ -145,8 +145,9 @@ class _CreateNotificationPageState extends State<CreateNotificationPage> {
   }
 
   void createNotification() {
+    print("0${selectedTime.minute}");
     final title =
-        'Medicine Intake Reminder @ ${selectedTime.hour}:${selectedTime.minute}';
+        'Medicine Intake Reminder @ ${selectedTime.hour>10?selectedTime.hour:"0${selectedTime.hour}"}:${selectedTime.minute>10?selectedTime.minute:"0${selectedTime.minute}"}';
     final description =
         'Hi, it is time to take your: ${_selectedCompany.name}.';
     final time = Time(selectedTime.hour, selectedTime.minute);
