@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:diabetes_app/diet/meal_plan_model.dart';
-import 'package:diabetes_app/diet/recipe_model.dart';
+import 'package:diabetes_app/diet/meal_plan.dart';
+import 'package:diabetes_app/diet/recipe.dart';
 import 'package:http/http.dart' as http;
 
 

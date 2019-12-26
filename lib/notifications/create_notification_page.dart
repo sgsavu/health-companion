@@ -13,8 +13,8 @@ class CreateNotificationPage extends StatefulWidget {
 }
 
 class _CreateNotificationPageState extends State<CreateNotificationPage> {
-  TimeOfDay selectedTime = TimeOfDay.now();
 
+  TimeOfDay selectedTime = TimeOfDay.now();
   List<DropdownMenuItem<Medicine>> _dropdownMenuItems;
   Medicine _selectedCompany;
 
@@ -28,15 +28,12 @@ class _CreateNotificationPageState extends State<CreateNotificationPage> {
 
   buildDropDownMenuItems(List medicine) {
     List<DropdownMenuItem<Medicine>> items = List();
-    print(medicine);
     for (Medicine medicine in medicine) {
       items.add(DropdownMenuItem(
         value: medicine,
         child: Text(medicine.name),
       ));
     }
-    print('to');
-    print(items);
     return items;
   }
 
@@ -145,7 +142,7 @@ class _CreateNotificationPageState extends State<CreateNotificationPage> {
   }
 
   void createNotification() {
-    print("0${selectedTime.minute}");
+
     final title =
         'Medicine Intake Reminder @ ${selectedTime.hour>10?selectedTime.hour:"0${selectedTime.hour}"}:${selectedTime.minute>10?selectedTime.minute:"0${selectedTime.minute}"}';
     final description =

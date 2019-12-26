@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:diabetes_app/diet/recipe_model.dart';
+import 'package:diabetes_app/diet/recipe.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 

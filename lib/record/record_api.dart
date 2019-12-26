@@ -37,17 +37,10 @@ uploadRecord(Record record,Function recordUploaded, String name, String type) as
     record.name = name ;
     record.type = type;
 
-    print('uploaded record succesfully: ${record}');
+    print('uploaded record succesfully: $record');
 
     await documentRef.setData(record.toMap(), merge: true);
 
     recordUploaded(record);
 
-}
-
-
-deleteRecord(Record record, Function recordDeleted) async{
-
-  await Firestore.instance.collection('Record').document(record.id).delete();
-  recordDeleted(record);
 }

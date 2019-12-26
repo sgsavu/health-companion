@@ -27,11 +27,6 @@ class RecordNotifier with ChangeNotifier{
     notifyListeners();
   }
 
-  deleteRecord(Record record){
-    _recordList.removeWhere((_record) => _record.id == record.id );
-    notifyListeners();
-
-  }
 
 
 }

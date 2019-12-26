@@ -1,5 +1,5 @@
-import 'package:diabetes_app/api_service.dart';
-import 'package:diabetes_app/diet/meal_plan_model.dart';
+import 'package:diabetes_app/diet/diet_api.dart';
+import 'package:diabetes_app/diet/meal_plan.dart';
 import 'package:diabetes_app/diet/meals_screen.dart';
 import 'package:flutter/material.dart';
 

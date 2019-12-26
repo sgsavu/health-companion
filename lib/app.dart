@@ -1,8 +1,8 @@
-import 'package:diabetes_app/tabs/diet_tab.dart';
-import 'package:diabetes_app/tabs/exercise_tab.dart';
-import 'package:diabetes_app/tabs/home_tab.dart';
-import 'package:diabetes_app/tabs/medicine_tab.dart';
-import 'package:diabetes_app/tabs/notifications_tab.dart';
+import 'package:diabetes_app/diet/diet_tab.dart';
+import 'package:diabetes_app/exercises/exercise_tab.dart';
+import 'package:diabetes_app/record/home_tab.dart';
+import 'package:diabetes_app/medicine/medicine_tab.dart';
+import 'package:diabetes_app/notifications/notifications_tab.dart';
 import 'package:flutter/material.dart';
 
 

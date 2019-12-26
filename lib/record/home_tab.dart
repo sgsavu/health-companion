@@ -35,20 +35,16 @@ class _HomeTabState extends State<HomeTab> {
 
   buildDropDownMenuItems(List medicine) {
     List<DropdownMenuItem<Medicine>> items = List();
-    print(medicine);
     for (Medicine medicine in medicine) {
       items.add(DropdownMenuItem(
         value: medicine,
         child: Text(medicine.name),
       ));
     }
-    print('to');
-    print(items);
     return items;
   }
 
   onChangeDropdownItem(Medicine selectedCompany) {
-    print('brobrobro');
     setState(() {
       _selectedCompany = selectedCompany;
       canShow=true;
@@ -90,34 +86,12 @@ class _HomeTabState extends State<HomeTab> {
         });
   }
 
-  createAlertDialog2(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Medicine Intake History'),
-            content: Container(
-              child: Text('No medicine selected.Please make sure you choose any of the avaialble medications to record.\n'),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     RecordNotifier recordNotifier = Provider.of<RecordNotifier>(context);
-
     MedicineNotifier medicineNotifier = Provider.of<MedicineNotifier>(context);
+
     _dropdownMenuItems = buildDropDownMenuItems(medicineNotifier.medicineList);
 
     return Container(
@@ -214,13 +188,13 @@ class _HomeTabState extends State<HomeTab> {
                       Text(
                         'Medicine Intake History',
                         style: TextStyle(
+                          letterSpacing: 1.5,
                             color: Colors.black,
-                            fontSize: 13,
+                            fontSize: 15,
                             fontWeight: FontWeight.w900),
                       ),
-                      Divider(
-                        color: Colors.black,
-                      ),
+
+                      SizedBox(height: 5,)
                     ]))),
             drawer: Drawer(
               child: ListView(

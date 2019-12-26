@@ -1,9 +1,9 @@
-import 'package:diabetes_app/api_service.dart';
-import 'package:diabetes_app/diet/recipe_model.dart';
+import 'package:diabetes_app/diet/diet_api.dart';
+import 'package:diabetes_app/diet/recipe.dart';
 import 'package:diabetes_app/diet/recipe_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:diabetes_app/diet/meal_plan_model.dart';
-import 'package:diabetes_app/diet/meal_model.dart';
+import 'package:diabetes_app/diet/meal_plan.dart';
+import 'package:diabetes_app/diet/meal.dart';
 
 
 class MealsScreen extends StatefulWidget{

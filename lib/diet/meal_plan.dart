@@ -1,4 +1,4 @@
-import 'package:diabetes_app/diet/meal_model.dart';
+import 'package:diabetes_app/diet/meal.dart';
 
 class MealPlan{
 
