@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 
 
 
-getMedicine(MedicineNotifier medicineNotifier)async{
+getMedicine(MedicineNotifier medicineNotifier, String currentUser)async{
   QuerySnapshot snapshot =  await Firestore.instance
       .collection('Medicine')
       .orderBy("createdAt", descending: true)
@@ -19,6 +19,7 @@ getMedicine(MedicineNotifier medicineNotifier)async{
 
   snapshot.documents.forEach((document) {
     Medicine medicine = Medicine.fromMap(document.data);
+    if(medicine.user==currentUser)
     _medicineList.add(medicine);
   });
 

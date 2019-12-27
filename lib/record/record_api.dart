@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 
-getRecord(RecordNotifier recordNotifier)async{
+getRecord(RecordNotifier recordNotifier,String currentUser)async{
 
   QuerySnapshot snapshot =  await Firestore.instance
       .collection('Records')
@@ -16,6 +16,7 @@ getRecord(RecordNotifier recordNotifier)async{
 
   snapshot.documents.forEach((document) {
     Record record = Record.fromMap(document.data);
+    if(record.name == currentUser)
     _recordList.add(record);
   });
 

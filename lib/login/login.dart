@@ -22,8 +22,18 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordController = new TextEditingController();
 
   AuthMode _authMode = AuthMode.Login;
-  bool loading = false;
+  bool loading=false;
   User _user = User();
+
+
+  @override
+  void initState() {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    initializeCurrentUser(authNotifier);
+
+    super.initState();
+  }
+
 
   login(User user, AuthNotifier authNotifier) async {
 
@@ -71,13 +81,6 @@ class _LoginState extends State<Login> {
     }
   }
 
-  @override
-  void initState() {
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
-    initializeCurrentUser(authNotifier);
-    super.initState();
-  }
-
   void _submitForm() {
     if (!_formKey.currentState.validate()) {
       return;
@@ -120,8 +123,8 @@ class _LoginState extends State<Login> {
           return 'Display Name is required';
         }
 
-        if (value.length < 3 || value.length > 12) {
-          return 'Display Name must be betweem 3 and 12 characters';
+        if (value.length < 3 ) {
+          return 'Display Name must be at least 3 characters';
         }
 
         return null;
@@ -254,8 +257,7 @@ class _LoginState extends State<Login> {
               padding: EdgeInsets.fromLTRB(32, 50, 32, 15),
               child: Column(
                 children: <Widget>[
-                  Image.asset('assets/diabetes1.jpg',
-                    scale: 40,),
+                  FadeInImage.assetNetwork(height: 100 ,placeholder: 'assets/giphy.gif', image: 'https://lions108la.it/wp-content/uploads/2019/09/LCI_CauseArea_Icons_01a-diabetes1-1-1024x1024.png',imageScale: 10,),
                   SizedBox(height: 20.0,),
                   Text(
                     "Diabetes Companion",

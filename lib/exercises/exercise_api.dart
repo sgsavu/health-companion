@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 
-getExercise(ExerciseNotifier exerciseNotifier)async{
+getExercise(ExerciseNotifier exerciseNotifier,String currentUser)async{
 
   QuerySnapshot snapshot =  await Firestore.instance
       .collection('Exercises')
@@ -16,6 +16,7 @@ getExercise(ExerciseNotifier exerciseNotifier)async{
 
   snapshot.documents.forEach((document) {
     Exercise exercise = Exercise.fromMap(document.data);
+    if(exercise.user==currentUser || exercise.user=='Default')
     _exerciseList.add(exercise);
   });
 

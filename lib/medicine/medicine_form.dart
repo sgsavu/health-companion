@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/medicine/medicine.dart';
 import 'package:diabetes_app/medicine/medicine_api.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
@@ -28,6 +29,7 @@ class _MedicineFormState extends State<MedicineForm>{
 
   @override
   void initState(){
+
     super.initState();
     MedicineNotifier medicineNotifier = Provider.of<MedicineNotifier>(context, listen: false);
 
@@ -178,9 +180,9 @@ class _MedicineFormState extends State<MedicineForm>{
     if (!_formKey.currentState.validate()){
       return;
     }
-
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     _formKey.currentState.save();
-
+    _currentMedicine.user = authNotifier.user.displayName;
     print('form saved');
 
     uploadMedicineAndImage(_currentMedicine,widget.isUpdating,_imageFile, _onMedicineUploaded );

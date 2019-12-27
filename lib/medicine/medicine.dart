@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Medicine {
 
+    String user;
     String id;
     String name;
     String image;
@@ -16,7 +17,7 @@ class Medicine {
 
     Medicine.fromMap(Map<String, dynamic> data){
 
-
+      user = data['user'];
       id = data['id'];
       name = data['name'];
       image = data['image'];
@@ -31,6 +32,7 @@ class Medicine {
 
     Map<String,dynamic> toMap(){
       return{
+        'user':user,
         'id':id,
         'name':name,
         'category': category,

@@ -1,7 +1,9 @@
 import 'package:diabetes_app/app.dart';
+import 'package:diabetes_app/exercises/exercise.dart';
 import 'package:diabetes_app/exercises/exercise_api.dart';
 import 'package:diabetes_app/exercises/exercise_form.dart';
 import 'package:diabetes_app/exercises/exercise_notifier.dart';
+import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/notifications/notification_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -14,9 +16,11 @@ class ExerciseTab extends StatefulWidget {
 
 class _ExerciseTabState extends State<ExerciseTab> {
   void initState() {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+
     ExerciseNotifier exerciseNotifier =
         Provider.of<ExerciseNotifier>(context, listen: false);
-    getExercise(exerciseNotifier);
+    getExercise(exerciseNotifier,authNotifier.user.displayName);
     super.initState();
     _initializeNotifications();
     notificationFuture = getScheduledNotifications();
@@ -29,6 +33,7 @@ class _ExerciseTabState extends State<ExerciseTab> {
   bool showButton = false;
   TimeOfDay selectedTime = TimeOfDay.now();
   int selectedIndex;
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +124,7 @@ class _ExerciseTabState extends State<ExerciseTab> {
                     alignment: Alignment.center,
                     children: <Widget>[
                       Container(
-                          height: 200.0,
+                          height: 200,
                           width: double.infinity,
                           margin:
                           EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -201,6 +206,7 @@ class _ExerciseTabState extends State<ExerciseTab> {
                                         fontSize: 15.0,
                                           color: Colors.white
                                       ),
+
                                     ),
                                   ],
                                 )
@@ -223,7 +229,7 @@ class _ExerciseTabState extends State<ExerciseTab> {
                 alignment: Alignment.center,
                 children: <Widget>[
                   Container(
-                    height: 210.0,
+                    height: 200.0,
                     width: double.infinity,
                     margin:
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),

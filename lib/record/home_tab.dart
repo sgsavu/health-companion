@@ -22,13 +22,15 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   void initState() {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+
     RecordNotifier recordNotifier =
         Provider.of<RecordNotifier>(context, listen: false);
-    getRecord(recordNotifier);
+    getRecord(recordNotifier,authNotifier.user.displayName);
 
     MedicineNotifier medicineNotifier =
         Provider.of<MedicineNotifier>(context, listen: false);
-    getMedicine(medicineNotifier);
+    getMedicine(medicineNotifier,authNotifier.user.displayName);
 
     super.initState();
   }

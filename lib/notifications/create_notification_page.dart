@@ -1,3 +1,4 @@
+import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/medicine/medicine.dart';
 import 'package:diabetes_app/medicine/medicine_api.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
@@ -20,9 +21,11 @@ class _CreateNotificationPageState extends State<CreateNotificationPage> {
 
   @override
   void initState() {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+
     MedicineNotifier medicineNotifier =
         Provider.of<MedicineNotifier>(context, listen: false);
-    getMedicine(medicineNotifier);
+    getMedicine(medicineNotifier, authNotifier.user.displayName);
     super.initState();
   }
 
