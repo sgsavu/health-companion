@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Exercise {
 
   String user;
+  String userEmail;
   String id;
   String name;
   String type;
@@ -19,6 +20,7 @@ class Exercise {
   Exercise.fromMap(Map<String, dynamic> data){
 
     user = data['user'];
+    userEmail = data['userEmail'];
     id = data['id'];
     name = data['name'];
     type = data['type'];
@@ -35,6 +37,7 @@ class Exercise {
   Map<String,dynamic> toMap(){
     return{
       'user':user,
+      'userEmail':userEmail,
       'id':id,
       'name':name,
       'type':type,

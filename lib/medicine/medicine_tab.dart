@@ -20,7 +20,7 @@ class _MedicineTabState extends State<MedicineTab>{
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     MedicineNotifier medicineNotifier =
     Provider.of<MedicineNotifier>(context, listen: false);
-    getMedicine(medicineNotifier, authNotifier.user.displayName);
+    getMedicine(medicineNotifier, authNotifier.user.email);
     super.initState();
   }
 

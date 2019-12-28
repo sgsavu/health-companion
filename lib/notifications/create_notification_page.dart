@@ -25,7 +25,7 @@ class _CreateNotificationPageState extends State<CreateNotificationPage> {
 
     MedicineNotifier medicineNotifier =
         Provider.of<MedicineNotifier>(context, listen: false);
-    getMedicine(medicineNotifier, authNotifier.user.displayName);
+    getMedicine(medicineNotifier, authNotifier.user.email);
     super.initState();
   }
 

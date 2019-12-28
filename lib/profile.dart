@@ -1,35 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-class Record {
+class Profile {
 
   String id;
-  String name;
-  String type;
+  String image;
   String email;
+  String name;
   Timestamp createdAt;
+  Timestamp updatedAt;
 
-  Record();
+  Profile();
 
-  Record.fromMap(Map<String, dynamic> data){
+  Profile.fromMap(Map<String, dynamic> data){
 
 
     id = data['id'];
-    name = data['name'];
-    type = data['type'];
+    image = data['image'];
     email = data['email'];
+    name = data['name'];
     createdAt = data['createdAt'];
-
+    updatedAt = data['updatedAt'];
 
   }
 
   Map<String,dynamic> toMap(){
     return{
       'id':id,
-      'name':name,
-      'type':type,
+      'image':image,
       'email':email,
+      'name':name,
       'createdAt':createdAt,
+      'updatedAt':updatedAt,
 
     };
   }

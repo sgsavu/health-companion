@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diabetes_app/loading.dart';
+import 'package:diabetes_app/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'login_api.dart';
@@ -58,6 +60,23 @@ class _LoginState extends State<Login> {
     AuthResult authResult = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: user.email, password: user.password)
         .catchError((error) => print(error.code));
+
+    Profile profile = Profile();
+
+    CollectionReference profileRef =  await Firestore.instance.collection('Profile');
+
+    profile.createdAt = Timestamp.now();
+
+    DocumentReference documentRef = await profileRef.add(profile.toMap());
+    profile.id = documentRef.documentID;
+    profile.name = user.displayName;
+    profile.email= user.email;
+    profile.image = "";
+
+    print('uploaded profile succesfully: ${profile.toString()}');
+
+    await documentRef.setData(profile.toMap(), merge: true);
+
 
     if (authResult != null) {
 

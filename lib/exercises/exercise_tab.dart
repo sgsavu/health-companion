@@ -20,7 +20,7 @@ class _ExerciseTabState extends State<ExerciseTab> {
 
     ExerciseNotifier exerciseNotifier =
         Provider.of<ExerciseNotifier>(context, listen: false);
-    getExercise(exerciseNotifier,authNotifier.user.displayName);
+    getExercise(exerciseNotifier,authNotifier.user.email);
     super.initState();
     _initializeNotifications();
     notificationFuture = getScheduledNotifications();

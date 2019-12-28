@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
 import 'package:diabetes_app/medicine/medicine.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
+import 'package:diabetes_app/profile.dart';
 
 
 
@@ -19,12 +21,67 @@ getMedicine(MedicineNotifier medicineNotifier, String currentUser)async{
 
   snapshot.documents.forEach((document) {
     Medicine medicine = Medicine.fromMap(document.data);
-    if(medicine.user==currentUser)
+    if(medicine.userEmail==currentUser)
     _medicineList.add(medicine);
   });
 
   medicineNotifier.medicineList = _medicineList;
 }
+
+
+uploadProfileImage(File localFile, AuthNotifier authNotifier) async{
+
+    print("uploading image");
+    Profile profile;
+    bool isUpdating = false;
+
+    var fileExtension = path.extension(localFile.path);
+    print(fileExtension);
+
+    var uuid = Uuid().v4();
+
+    final StorageReference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('users/profileimages/$uuid%fileExtension');
+
+    await firebaseStorageRef.putFile(localFile).onComplete.catchError(
+            (onError){
+          print(onError);
+          return false;
+        }
+    );
+
+    String url = await firebaseStorageRef.getDownloadURL();
+    print("download url: $url");
+
+    CollectionReference profileRef =  await Firestore.instance.collection('Profile');
+
+    if(url!=null)
+    profile.image = url;
+    if (isUpdating){
+      profile.updatedAt = Timestamp.now();
+      await profileRef.document(profile.id).updateData(profile.toMap());
+
+
+      print('updated medicine with id: ${profile.id}');
+    }else{
+
+      profile.createdAt = Timestamp.now();
+      profile.email = authNotifier.user.email;
+
+      DocumentReference documentRef = await profileRef.add(profile.toMap());
+      profile.id = documentRef.documentID;
+
+      print('uploaded medicine succesfully: ${profile.toString()}');
+
+      await documentRef.setData(profile.toMap(), merge: true);
+
+
+    }
+
+
+}
+
+
 
 
 uploadMedicineAndImage(Medicine medicine, bool isUpdating, File localFile, Function medicineUploaded) async{

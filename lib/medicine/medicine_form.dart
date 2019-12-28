@@ -183,6 +183,7 @@ class _MedicineFormState extends State<MedicineForm>{
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     _formKey.currentState.save();
     _currentMedicine.user = authNotifier.user.displayName;
+    _currentMedicine.userEmail = authNotifier.user.email;
     print('form saved');
 
     uploadMedicineAndImage(_currentMedicine,widget.isUpdating,_imageFile, _onMedicineUploaded );

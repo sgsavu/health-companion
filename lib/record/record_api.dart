@@ -16,14 +16,14 @@ getRecord(RecordNotifier recordNotifier,String currentUser)async{
 
   snapshot.documents.forEach((document) {
     Record record = Record.fromMap(document.data);
-    if(record.name == currentUser)
+    if(record.email == currentUser)
     _recordList.add(record);
   });
 
   recordNotifier.recordList = _recordList;
 }
 
-uploadRecord(Record record,Function recordUploaded, String name, String type) async{
+uploadRecord(Record record,Function recordUploaded, String name, String type, String email) async{
 
 
 
@@ -37,6 +37,7 @@ uploadRecord(Record record,Function recordUploaded, String name, String type) as
     record.id = documentRef.documentID;
     record.name = name ;
     record.type = type;
+    record.email = email;
 
     print('uploaded record succesfully: $record');
 

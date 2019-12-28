@@ -11,11 +11,13 @@ class RecordForm extends StatefulWidget{
 
   final String bro;
   final String type;
+  final String email;
 
   RecordForm({
 
     @required this.bro,
-    @required this.type
+    @required this.type,
+    @required this.email
   });
 
   @override
@@ -37,7 +39,7 @@ class _RecordFormState extends State<RecordForm>{
       _currentRecord = Record();
     }
 
-    uploadRecord(_currentRecord, _onRecordUploaded, widget.bro, widget.type);
+    uploadRecord(_currentRecord, _onRecordUploaded, widget.bro, widget.type, widget.email);
   }
 
   _onRecordUploaded(Record record){

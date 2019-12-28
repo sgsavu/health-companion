@@ -16,7 +16,7 @@ getExercise(ExerciseNotifier exerciseNotifier,String currentUser)async{
 
   snapshot.documents.forEach((document) {
     Exercise exercise = Exercise.fromMap(document.data);
-    if(exercise.user==currentUser || exercise.user=='Default')
+    if(exercise.userEmail==currentUser || exercise.userEmail=='Default')
     _exerciseList.add(exercise);
   });
 
