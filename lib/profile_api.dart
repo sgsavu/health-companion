@@ -62,16 +62,16 @@ uploadProfileAndImage(Profile profile, bool isUpdating, File localFile, Function
 
     String url = await firebaseStorageRef.getDownloadURL();
     print("download url: $url");
-    _uploadProfile(profile, isUpdating, profileUploaded, imageUrl: url);
+    uploadProfile(profile, isUpdating, profileUploaded, imageUrl: url);
 
   }else{
     print('...skipping image upload');
-    _uploadProfile(profile, isUpdating, profileUploaded);
+    uploadProfile(profile, isUpdating, profileUploaded);
   }
 
 }
 
-_uploadProfile(Profile profile, bool isUpdating,Function profileUploaded, {String imageUrl}) async{
+uploadProfile(Profile profile, bool isUpdating,Function profileUploaded, {String imageUrl}) async{
   CollectionReference profileRef =  await Firestore.instance.collection('Profile');
 
   if (imageUrl!= null){

@@ -29,60 +29,6 @@ getMedicine(MedicineNotifier medicineNotifier, String currentUser)async{
 }
 
 
-uploadProfileImage(File localFile, AuthNotifier authNotifier) async{
-
-    print("uploading image");
-    Profile profile;
-    bool isUpdating = false;
-
-    var fileExtension = path.extension(localFile.path);
-    print(fileExtension);
-
-    var uuid = Uuid().v4();
-
-    final StorageReference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('users/profileimages/$uuid%fileExtension');
-
-    await firebaseStorageRef.putFile(localFile).onComplete.catchError(
-            (onError){
-          print(onError);
-          return false;
-        }
-    );
-
-    String url = await firebaseStorageRef.getDownloadURL();
-    print("download url: $url");
-
-    CollectionReference profileRef =  await Firestore.instance.collection('Profile');
-
-    if(url!=null)
-    profile.image = url;
-    if (isUpdating){
-      profile.updatedAt = Timestamp.now();
-      await profileRef.document(profile.id).updateData(profile.toMap());
-
-
-      print('updated medicine with id: ${profile.id}');
-    }else{
-
-      profile.createdAt = Timestamp.now();
-      profile.email = authNotifier.user.email;
-
-      DocumentReference documentRef = await profileRef.add(profile.toMap());
-      profile.id = documentRef.documentID;
-
-      print('uploaded medicine succesfully: ${profile.toString()}');
-
-      await documentRef.setData(profile.toMap(), merge: true);
-
-
-    }
-
-
-}
-
-
-
 
 uploadMedicineAndImage(Medicine medicine, bool isUpdating, File localFile, Function medicineUploaded) async{
 
@@ -106,16 +52,16 @@ uploadMedicineAndImage(Medicine medicine, bool isUpdating, File localFile, Funct
 
     String url = await firebaseStorageRef.getDownloadURL();
     print("download url: $url");
-    _uploadMedicine(medicine, isUpdating, medicineUploaded, imageUrl: url);
+    uploadMedicine(medicine, isUpdating, medicineUploaded, imageUrl: url);
 
   }else{
     print('...skipping image upload');
-    _uploadMedicine(medicine, isUpdating, medicineUploaded);
+    uploadMedicine(medicine, isUpdating, medicineUploaded);
   }
 
 }
 
-_uploadMedicine(Medicine medicine, bool isUpdating,Function medicineUploaded, {String imageUrl}) async{
+uploadMedicine(Medicine medicine, bool isUpdating,Function medicineUploaded, {String imageUrl}) async{
   CollectionReference medicineRef =  await Firestore.instance.collection('Medicine');
 
   if (imageUrl!= null){

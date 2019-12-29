@@ -46,3 +46,12 @@ uploadRecord(Record record,Function recordUploaded, String name, String type, St
     recordUploaded(record);
 
 }
+
+updateRecord(Record record) async{
+
+  CollectionReference medicineRef =  await Firestore.instance.collection('Records');
+  await medicineRef.document(record.id).updateData(record.toMap());
+
+  print('updated record with id: ${record.id}');
+
+}

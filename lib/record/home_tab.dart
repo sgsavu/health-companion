@@ -1,12 +1,9 @@
-import 'dart:async';
-
-import 'package:diabetes_app/loading.dart';
+import 'package:diabetes_app/about.dart';
 import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/login/login_api.dart';
 import 'package:diabetes_app/medicine/medicine.dart';
 import 'package:diabetes_app/medicine/medicine_api.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
-import 'package:diabetes_app/profile.dart';
 import 'package:diabetes_app/profile_api.dart';
 import 'package:diabetes_app/profile_notifier.dart';
 import 'package:diabetes_app/record/record_api.dart';
@@ -15,8 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:diabetes_app/record/record_form.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class HomeTab extends StatefulWidget {
   @override
@@ -27,11 +22,13 @@ class _HomeTabState extends State<HomeTab> {
   List<DropdownMenuItem<Medicine>> _dropdownMenuItems;
   Medicine _selectedCompany;
   bool canShow = false;
-  File _imageFile;
 
   @override
   void initState() {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    authNotifier.user.reload();
+    initializeCurrentUser(authNotifier);
+    initializeCurrentUser(authNotifier);
     RecordNotifier recordNotifier =
         Provider.of<RecordNotifier>(context, listen: false);
     getRecord(recordNotifier,authNotifier.user.email);
@@ -44,38 +41,7 @@ class _HomeTabState extends State<HomeTab> {
     Provider.of<ProfileNotifier>(context, listen: false);
     getProfile(profileNotifier,authNotifier.user.email);
 
-    print(profileNotifier.profileList);
-
     super.initState();
-  }
-
-
-  _onProfileUploaded(Profile profile, bool hmm){
-    ProfileNotifier profileNotifier = Provider.of<ProfileNotifier>(context);
-    if (hmm == false){
-      profileNotifier.addProfile(profile);
-    }
-
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
-    getProfile(profileNotifier,authNotifier.user.email);
-
-  }
-
-  _getLocalImage() async{
-
-    ProfileNotifier profileNotifier = Provider.of<ProfileNotifier>(context);
-
-    File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery,
-        imageQuality: 50,
-        maxWidth: 400);
-
-    if (imageFile != null){
-      setState(() {
-        _imageFile = imageFile;
-      });
-    }
-
-    uploadProfileAndImage(profileNotifier.profileList[0], true, _imageFile, _onProfileUploaded);
   }
 
 
@@ -160,7 +126,7 @@ class _HomeTabState extends State<HomeTab> {
                   iconTheme: IconThemeData(color: Colors.black),
                   elevation: 0.0,
                   title: Text(
-                    "Welcome back, ${authNotifier.user != null ? authNotifier.user.displayName : "Feed"}!",
+                    "Welcome back, ${profileNotifier.profileList.isEmpty?'user':profileNotifier.profileList.elementAt(0)?.name!=null?profileNotifier.profileList.elementAt(0)?.name:'User'}!",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -252,7 +218,7 @@ class _HomeTabState extends State<HomeTab> {
                   children: <Widget>[
                     UserAccountsDrawerHeader(
                       accountName: Text(
-                          "${authNotifier.user != null ? authNotifier.user.displayName : "Feed"}"),
+                          "${profileNotifier.profileList.isEmpty?'User':profileNotifier.profileList.elementAt(0)?.name!=""?profileNotifier.profileList.elementAt(0)?.name:'https://www.sackettwaconia.com/wp-content/uploads/default-profile.png'}"),
                       accountEmail: Text(
                           "${authNotifier.user != null ? authNotifier.user.email : "Feed"}"),
                       currentAccountPicture: CircleAvatar(
@@ -260,9 +226,12 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                     ),
                     ListTile(
-                      title: Text('About'),
-                      trailing: Icon(Icons.info),
-                      onTap: _getLocalImage,
+                      title: Text('Edit Profile'),
+                      trailing: Icon(Icons.edit),
+                      onTap: () => {Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (BuildContext context) {
+                      return AboutPage();
+                      }))},
                     ),
                     Divider(
                       color: Colors.black,

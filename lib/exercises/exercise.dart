@@ -14,6 +14,7 @@ class Exercise {
   String set4;
   String set5;
   Timestamp createdAt;
+  Timestamp updatedAt;
 
   Exercise();
 
@@ -30,6 +31,7 @@ class Exercise {
     set4 = data['set4'];
     set5 = data['set5'];
     createdAt = data['createdAt'];
+    updatedAt = data['updatedAt'];
 
 
   }
@@ -47,7 +49,7 @@ class Exercise {
       'set4':set4,
       'set5':set5,
       'createdAt':createdAt,
-
+      'updatedAt':updatedAt,
     };
   }
 

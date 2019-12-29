@@ -4,4 +4,5 @@ class User{
   String password;
 
   User();
+
 }
