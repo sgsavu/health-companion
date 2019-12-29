@@ -1,4 +1,7 @@
 import 'package:diabetes_app/about.dart';
+import 'package:diabetes_app/exercises/exercise_api.dart';
+import 'package:diabetes_app/exercises/exercise_notifier.dart';
+import 'package:diabetes_app/loading.dart';
 import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/login/login_api.dart';
 import 'package:diabetes_app/medicine/medicine.dart';
@@ -6,8 +9,10 @@ import 'package:diabetes_app/medicine/medicine_api.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
 import 'package:diabetes_app/profile_api.dart';
 import 'package:diabetes_app/profile_notifier.dart';
+import 'package:diabetes_app/record/record.dart';
 import 'package:diabetes_app/record/record_api.dart';
 import 'package:diabetes_app/record/record_notifier.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +25,11 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   List<DropdownMenuItem<Medicine>> _dropdownMenuItems;
+  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
   Medicine _selectedCompany;
   bool canShow = false;
+  String currentPassword ="";
+  bool loading = false;
 
   @override
   void initState() {
@@ -40,6 +48,8 @@ class _HomeTabState extends State<HomeTab> {
     ProfileNotifier profileNotifier =
     Provider.of<ProfileNotifier>(context, listen: false);
     getProfile(profileNotifier,authNotifier.user.email);
+
+
 
     super.initState();
   }
@@ -90,8 +100,158 @@ class _HomeTabState extends State<HomeTab> {
                     return RecordForm(
                         bro: authNotifier.user.displayName,
                         type: _selectedCompany.name,
-                    email: authNotifier.user.email);
+                        email: authNotifier.user.email);
                   }));
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  createAlertDialog4(BuildContext context, String title, String message) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Form(
+              key: _formKey2,
+              autovalidate: true,
+              child: Column(
+                children: <Widget>[
+                  Text(message),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Current Password',
+                    ),
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(fontSize: 15),
+                    obscureText: true,
+                    validator: (String value) {
+                      return null;
+                    },
+                    onSaved: (String value) {
+                      currentPassword = value;
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Return'),
+                onPressed: () {
+                  setState(() {
+                    loading = false;
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('Submit'),
+                onPressed: () {
+                  _formKey2.currentState.save();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+
+  deleteAccountandData() async{
+
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    ProfileNotifier profileNotifier = Provider.of<ProfileNotifier>(context);
+    RecordNotifier recordNotifier = Provider.of<RecordNotifier>(context);
+    MedicineNotifier medicineNotifier = Provider.of<MedicineNotifier>(context);
+
+    await createAlertDialog4(context, 'Validate',
+        'Please type in your current password to validate.');
+    if (currentPassword != "") {
+      setState(() {
+        loading = true;
+      });
+
+
+
+      try {
+        await authNotifier.user.reauthenticateWithCredential(
+            EmailAuthProvider.getCredential(
+                email: authNotifier.user.email, password: currentPassword));
+
+        deleteProfile(profileNotifier.profileList[0]);
+
+        for (Record record in recordNotifier.recordList) {
+          deleteRecord(record);
+        }
+
+        for (Medicine medicine in medicineNotifier.medicineList) {
+          deleteMedicine(medicine,()=>{
+            print('deleted')
+          });
+        }
+
+        authNotifier.user.delete();
+
+
+        await createAlertDialog2(context, 'Success',
+            'Your account has been deleted');
+        signout(authNotifier);
+
+      } catch (error) {
+        await createAlertDialog2(context, 'Error', error.toString());
+    }
+    }
+  }
+  createAlertDialog2(BuildContext context, String title, String message) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Container(
+              child: Text(message),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  setState(() {
+                    loading = false;
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+
+  createAlertDialogDeletion(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Warning'),
+            content: Container(
+              child: Text('Are you sure you want to permanently delete your accont along with all its information? \nThis action cannot be revoked, so please make sure that this is what you intend to do.'),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('No'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('Yes'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  deleteAccountandData();
                 },
               )
             ],
@@ -111,7 +271,7 @@ class _HomeTabState extends State<HomeTab> {
     _dropdownMenuItems = buildDropDownMenuItems(medicineNotifier.medicineList);
 
 
-      return Container(
+      return loading?Loading():Container(
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
@@ -199,16 +359,28 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                           alignment: Alignment.center,
                         ),
-                        Divider(
-                          color: Colors.black,
-                        ),
-                        Text(
-                          'Medicine Intake History',
-                          style: TextStyle(
-                              letterSpacing: 1.5,
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w900),
+                        Divider(),//or SizedBox(height:15,);
+                        Container(
+                          height: 20.0,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.blueAccent,
+                            borderRadius: BorderRadius.circular(10.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(0, 2),
+                                blurRadius: 6.0,
+                              ),
+                            ],
+                          ),
+                          child: Text('Medicine Intake History',style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),)
                         ),
 
                         SizedBox(height: 5,)
@@ -232,6 +404,15 @@ class _HomeTabState extends State<HomeTab> {
                           .push(MaterialPageRoute(builder: (BuildContext context) {
                       return AboutPage();
                       }))},
+                    ),
+                    Divider(
+                      color: Colors.black,
+                      height: 5,
+                    ),
+                    ListTile(
+                      title: Text('Delete Account'),
+                      trailing: Icon(Icons.delete_forever),
+                      onTap: () => {createAlertDialogDeletion(context)},
                     ),
                     Divider(
                       color: Colors.black,

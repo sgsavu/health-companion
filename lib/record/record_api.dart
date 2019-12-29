@@ -55,3 +55,8 @@ updateRecord(Record record) async{
   print('updated record with id: ${record.id}');
 
 }
+
+deleteRecord(Record record) async{
+
+  await Firestore.instance.collection('Records').document(record.id).delete();
+}

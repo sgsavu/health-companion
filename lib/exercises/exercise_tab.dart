@@ -63,6 +63,13 @@ class _ExerciseTabState extends State<ExerciseTab> {
                         ),
                 ),
                 SizedBox(height: 10,),
+                canShow
+                    ? SizedBox()
+                    : Text(
+                  'Select any of the plans below to set a reminder',
+                  style: TextStyle(
+                      fontSize: 13),
+                ),
                 Container(
                   child:canShow? Row(
                     mainAxisAlignment: MainAxisAlignment.center,

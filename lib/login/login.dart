@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diabetes_app/loading.dart';
+import 'package:diabetes_app/resetpassword.dart';
 import 'package:diabetes_app/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -195,15 +196,16 @@ class _LoginState extends State<Login> {
           prefixIcon: Icon(Icons.email)),
       cursorColor: Colors.white,
       validator: (String value) {
-        if (value.isEmpty) {
-          return 'Email is required';
+
+        if (!value.isEmpty) {
+
+          if (!RegExp(
+              r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+              .hasMatch(value)) {
+            return 'Please enter a valid email address';
+          }
         }
 
-        if (!RegExp(
-                r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-            .hasMatch(value)) {
-          return 'Please enter a valid email address';
-        }
 
         return null;
       },
@@ -229,12 +231,10 @@ class _LoginState extends State<Login> {
       obscureText: true,
       controller: _passwordController,
       validator: (String value) {
-        if (value.isEmpty) {
-          return 'Password is required';
-        }
-
-        if (value.length < 5 || value.length > 20) {
-          return 'Password must be betweem 5 and 20 characters';
+        if (!value.isEmpty) {
+          if (value.length < 5 || value.length > 20) {
+            return 'Password must be betweem 5 and 20 characters';
+          }
         }
 
         return null;
@@ -298,7 +298,7 @@ class _LoginState extends State<Login> {
                           height: 20.0,
                         ),
                         Text(
-                          "Diabetes Companion",
+                          "Health Companion",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 30, fontWeight: FontWeight.bold),
@@ -363,44 +363,89 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
+                        _authMode == AuthMode.Signup?
                         SizedBox(
                           height: 16,
-                        ),
-                        Text(
-                            '${_authMode == AuthMode.Login ? "Don't have an account?" : "Have an account?"}'),
-                        ButtonTheme(
-                          child: FlatButton(
-                            textColor: Colors.white,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25.0),
-                                gradient: LinearGradient(
-                                  colors: <Color>[
-                                    Color(0xFF0D47A1),
-                                    Color(0xFF1976D2),
-                                    Color(0xFF42A5F5),
-                                  ],
+                        ):SizedBox(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              _authMode == AuthMode.Login? Text('Forgot password?'):SizedBox(),
+                              _authMode == AuthMode.Login? ButtonTheme(
+                                child: FlatButton(
+                                  textColor: Colors.white,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      gradient: LinearGradient(
+                                        colors: <Color>[
+                                          Color(0xFF0D47A1),
+                                          Color(0xFF1976D2),
+                                          Color(0xFF42A5F5),
+                                        ],
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0,
+                                        top: 2.0,
+                                        right: 5.0,
+                                        bottom: 2.0),
+                                    child: Text(
+                                      'Reset password',
+                                      style: TextStyle(fontSize: 10),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(builder: (BuildContext context) {
+                                      return ResetPassword();
+                                    }));
+                                  },
                                 ),
-                              ),
-                              padding: const EdgeInsets.only(
-                                  left: 10.0,
-                                  top: 5.0,
-                                  right: 10.0,
-                                  bottom: 5.0),
-                              child: Text(
-                                '${_authMode == AuthMode.Login ? 'Sign up' : 'Log in'}',
-                                style: TextStyle(fontSize: 10),
+                              ):SizedBox(),
+                            ],
+                          ),
+
+                            Text(
+                                '${_authMode == AuthMode.Login ? "Don't have an account?" : "Have an account?"}'),
+                            ButtonTheme(
+                              child: FlatButton(
+                                textColor: Colors.white,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    gradient: LinearGradient(
+                                      colors: <Color>[
+                                        Color(0xFF0D47A1),
+                                        Color(0xFF1976D2),
+                                        Color(0xFF42A5F5),
+                                      ],
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0,
+                                      top: 5.0,
+                                      right: 10.0,
+                                      bottom: 5.0),
+                                  child: Text(
+                                    '${_authMode == AuthMode.Login ? 'Sign up' : 'Log in'}',
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _authMode = _authMode == AuthMode.Login
+                                        ? AuthMode.Signup
+                                        : AuthMode.Login;
+                                  });
+                                },
                               ),
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _authMode = _authMode == AuthMode.Login
-                                    ? AuthMode.Signup
-                                    : AuthMode.Login;
-                              });
-                            },
-                          ),
-                        ),
+
+
+
+
+
                         Text(
                           _authMode == AuthMode.Login
                               ? ''

@@ -109,20 +109,17 @@ class _AboutPageState extends State<AboutPage> {
 
     if (newPassword != "" &&
         oldName != profileNotifier.profileList.elementAt(0)?.name) {
-
-
-      currentPassword="";
+      currentPassword = "";
 
       await createAlertDialog4(context, 'Validate',
           'Please type in your current password to validate.');
 
-      if(currentPassword!=""){
+      if (currentPassword != "") {
         setState(() {
           loading = true;
         });
 
         try {
-
           UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
           userUpdateInfo.displayName =
               profileNotifier.profileList.elementAt(0)?.name;
@@ -134,11 +131,9 @@ class _AboutPageState extends State<AboutPage> {
                   email: authNotifier.user.email, password: currentPassword));
           authNotifier.user.updatePassword(newPassword);
 
-
-          uploadProfile(
-              profileNotifier.profileList.elementAt(0), true, _onProfileUploaded,
+          uploadProfile(profileNotifier.profileList.elementAt(0), true,
+              _onProfileUploaded,
               imageUrl: null);
-
 
           for (Medicine medicine in medicineNotifier.medicineList) {
             medicine.user = profileNotifier.profileList.elementAt(0)?.name;
@@ -155,17 +150,13 @@ class _AboutPageState extends State<AboutPage> {
             updateRecord(record);
           }
 
-
-          createAlertDialog2(
-              context, 'Success', 'Your password and name have been sucessfully updated.');
-
+          createAlertDialog2(context, 'Success',
+              'Your password and name have been sucessfully updated.');
         } catch (error) {
-          profileNotifier.profileList.elementAt(0)?.name=oldName;
+          profileNotifier.profileList.elementAt(0)?.name = oldName;
           await createAlertDialog2(context, 'Error', error.toString());
         }
       }
-
-
     } else if (oldName != profileNotifier.profileList.elementAt(0)?.name) {
       setState(() {
         loading = true;
@@ -201,13 +192,12 @@ class _AboutPageState extends State<AboutPage> {
         record.name = profileNotifier.profileList.elementAt(0)?.name;
         updateRecord(record);
       }
-
     } else if (newPassword != "") {
-      currentPassword="";
+      currentPassword = "";
 
       await createAlertDialog4(context, 'Validate',
           'Please type in your current password to validate.');
-      if(currentPassword!=""){
+      if (currentPassword != "") {
         setState(() {
           loading = true;
         });
@@ -217,8 +207,8 @@ class _AboutPageState extends State<AboutPage> {
               EmailAuthProvider.getCredential(
                   email: authNotifier.user.email, password: currentPassword));
           authNotifier.user.updatePassword(newPassword);
-          createAlertDialog2(
-              context, 'Success', 'Your password has been sucessfully updated.');
+          createAlertDialog2(context, 'Success',
+              'Your password has been sucessfully updated.');
         } catch (error) {
           await createAlertDialog2(context, 'Error', error.toString());
         }

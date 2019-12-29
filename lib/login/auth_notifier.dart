@@ -11,4 +11,7 @@ class AuthNotifier with ChangeNotifier{
     _user = user;
     notifyListeners();
   }
+
+
+
 }

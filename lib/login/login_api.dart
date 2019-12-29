@@ -8,6 +8,11 @@ signout(AuthNotifier authNotifier) async {
   authNotifier.setUser(null);
 }
 
+Future<void> sendPasswordResetEmail(String email) async {
+  return FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+}
+
+
 initializeCurrentUser(AuthNotifier authNotifier) async {
   FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
 

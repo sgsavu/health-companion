@@ -71,6 +71,8 @@ uploadProfileAndImage(Profile profile, bool isUpdating, File localFile, Function
 
 }
 
+
+
 uploadProfile(Profile profile, bool isUpdating,Function profileUploaded, {String imageUrl}) async{
   CollectionReference profileRef =  await Firestore.instance.collection('Profile');
 
@@ -100,4 +102,18 @@ uploadProfile(Profile profile, bool isUpdating,Function profileUploaded, {String
     profileUploaded(profile, false);
 
   }
+}
+
+deleteProfile(Profile profile) async{
+  if(profile.image!=""){
+    StorageReference storageReference = await FirebaseStorage.instance.getReferenceFromUrl(profile.image);
+
+    print(storageReference.path);
+
+    await storageReference.delete();
+
+    print('old image deleted');
+  }
+
+  await Firestore.instance.collection('Profile').document(profile.id).delete();
 }
