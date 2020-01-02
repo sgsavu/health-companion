@@ -140,7 +140,7 @@ class _HomeTabState extends State<HomeTab> {
             ),
             actions: <Widget>[
               FlatButton(
-                child: Text('Return'),
+                child: Text('Back'),
                 onPressed: () {
                   setState(() {
                     loading = false;

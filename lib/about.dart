@@ -247,7 +247,7 @@ class _AboutPageState extends State<AboutPage> {
             ),
             actions: <Widget>[
               FlatButton(
-                child: Text('Return'),
+                child: Text('Back'),
                 onPressed: () {
                   setState(() {
                     loading = false;
