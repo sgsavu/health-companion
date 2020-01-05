@@ -1,3 +1,4 @@
+import 'package:diabetes_app/loading.dart';
 import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/login/login_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String currentEmail;
+  bool loading=false;
 
 
   Widget _buildEmailField() {
@@ -62,6 +64,9 @@ class _ResetPasswordState extends State<ResetPassword> {
               FlatButton(
                 child: Text('Ok'),
                 onPressed: () {
+                  setState(() {
+                    loading = false;
+                  });
                   Navigator.pop(context);
                 },
               ),
@@ -77,6 +82,9 @@ class _ResetPasswordState extends State<ResetPassword> {
       return;
     }
     _formKey.currentState.save();
+    setState(() {
+      loading = true;
+    });
 
     try{
       await sendPasswordResetEmail(currentEmail);
@@ -92,7 +100,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading?Loading():Scaffold(
       appBar: AppBar(
             backgroundColor: Colors.white.withOpacity(0.0),
             iconTheme: IconThemeData(color: Colors.black),

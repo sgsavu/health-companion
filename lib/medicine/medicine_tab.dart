@@ -93,7 +93,7 @@ class _MedicineTabState extends State<MedicineTab>{
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(medicineNotifier.medicineList[index].description,
+                        Text(medicineNotifier.medicineList[index].category,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15.0,
