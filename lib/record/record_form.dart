@@ -1,4 +1,3 @@
-
 import 'package:diabetes_app/loading.dart';
 import 'package:diabetes_app/record/record.dart';
 import 'package:diabetes_app/record/record_api.dart';

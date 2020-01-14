@@ -81,28 +81,6 @@ class _NotificationsTabState extends State<NotificationsTab>{
 
   }
 
-
-  Future<void> showWeeklyAtDayAndTime(Time time, Day day, int id, String title, String description) async {
-    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'show weekly channel id',
-      'show weekly channel name',
-      'show weekly description',
-    );
-    final iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    final platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics,
-      iOSPlatformChannelSpecifics,
-    );
-    await _flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
-      id,
-      title,
-      description,
-      day,
-      time,
-      platformChannelSpecifics,
-    );
-  }
-
   Future<void> showDailyAtTime(Time time, int id, String title, String description) async {
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'channel id',

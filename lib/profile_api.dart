@@ -14,16 +14,16 @@ getProfile(ProfileNotifier profileNotifier, String currentUser)async{
       .orderBy("createdAt", descending: true)
       .getDocuments();
 
-  List<Profile> _profileList = [];
+  Profile _currentProfile;
 
 
   snapshot.documents.forEach((document) {
     Profile profile = Profile.fromMap(document.data);
     if(profile.email==currentUser)
-      _profileList.add(profile);
+      _currentProfile=profile;
   });
 
-  profileNotifier.profileList = _profileList;
+  profileNotifier.currentProfile = _currentProfile;
 }
 
 
@@ -105,7 +105,7 @@ uploadProfile(Profile profile, bool isUpdating,Function profileUploaded, {String
 }
 
 deleteProfile(Profile profile) async{
-  if(profile.image!=""){
+  if(profile.image!="https://www.sackettwaconia.com/wp-content/uploads/default-profile.png"){
     StorageReference storageReference = await FirebaseStorage.instance.getReferenceFromUrl(profile.image);
 
     print(storageReference.path);

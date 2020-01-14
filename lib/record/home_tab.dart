@@ -1,6 +1,4 @@
 import 'package:diabetes_app/about.dart';
-import 'package:diabetes_app/exercises/exercise_api.dart';
-import 'package:diabetes_app/exercises/exercise_notifier.dart';
 import 'package:diabetes_app/loading.dart';
 import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/login/login_api.dart';
@@ -182,7 +180,7 @@ class _HomeTabState extends State<HomeTab> {
             EmailAuthProvider.getCredential(
                 email: authNotifier.user.email, password: currentPassword));
 
-        deleteProfile(profileNotifier.profileList[0]);
+        deleteProfile(profileNotifier.currentProfile);
 
         for (Record record in recordNotifier.recordList) {
           deleteRecord(record);
@@ -286,7 +284,7 @@ class _HomeTabState extends State<HomeTab> {
                   iconTheme: IconThemeData(color: Colors.black),
                   elevation: 0.0,
                   title: Text(
-                    "Welcome back, ${profileNotifier.profileList.isEmpty?'user':profileNotifier.profileList.elementAt(0)?.name!=null?profileNotifier.profileList.elementAt(0)?.name:'User'}!",
+                    "Welcome back, ${profileNotifier.currentProfile?.name!=null?profileNotifier.currentProfile?.name:'User'}!",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -390,11 +388,11 @@ class _HomeTabState extends State<HomeTab> {
                   children: <Widget>[
                     UserAccountsDrawerHeader(
                       accountName: Text(
-                          "${profileNotifier.profileList.isEmpty?'User':profileNotifier.profileList.elementAt(0)?.name!=""?profileNotifier.profileList.elementAt(0)?.name:'https://www.sackettwaconia.com/wp-content/uploads/default-profile.png'}"),
+                          "${profileNotifier.currentProfile?.name!=null?profileNotifier.currentProfile?.name:'null'}"),
                       accountEmail: Text(
                           "${authNotifier.user != null ? authNotifier.user.email : "Feed"}"),
                       currentAccountPicture: CircleAvatar(
-                        backgroundImage: NetworkImage(profileNotifier.profileList.isEmpty?'wow':profileNotifier.profileList.elementAt(0)?.image!=""?profileNotifier.profileList.elementAt(0)?.image:'https://www.sackettwaconia.com/wp-content/uploads/default-profile.png'),
+                        backgroundImage: NetworkImage(profileNotifier.currentProfile?.image!=null?profileNotifier.currentProfile?.image:'null'),
                       ),
                     ),
                     ListTile(

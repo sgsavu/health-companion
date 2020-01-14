@@ -1,9 +1,7 @@
+import 'package:diabetes_app/global_api.dart';
 import 'package:diabetes_app/loading.dart';
-import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/login/login_api.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ResetPassword extends StatefulWidget {
   @override
@@ -34,7 +32,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       cursorColor: Colors.white,
       validator: (String value) {
 
-        if (!value.isEmpty) {
+        if (value.isNotEmpty) {
           if (!RegExp(
               r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
               .hasMatch(value)) {
@@ -51,29 +49,6 @@ class _ResetPasswordState extends State<ResetPassword> {
     );
   }
 
-  createAlertDialog2(BuildContext context, String title, String message) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Container(
-              child: Text(message),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  setState(() {
-                    loading = false;
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
-  }
 
 
   saveForm() async{
@@ -88,13 +63,15 @@ class _ResetPasswordState extends State<ResetPassword> {
 
     try{
       await sendPasswordResetEmail(currentEmail);
-      await createAlertDialog2(context, 'Success', 'Password reset email has been successfully sent.');
+      await createAlertDialogCustom(context, 'Success', 'Password reset email has been successfully sent.', 'https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png');
       Navigator.pop(context);
     }catch (error){
-      createAlertDialog2(context, 'Error', error.toString());
+      createAlertDialogCustom(context, 'Error', error.toString(), 'https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png');
     }
 
-    print('sent');
+    setState(() {
+      loading = false;
+    });
   }
 
 

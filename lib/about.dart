@@ -5,7 +5,6 @@ import 'package:diabetes_app/exercises/exercise_api.dart';
 import 'package:diabetes_app/exercises/exercise_notifier.dart';
 import 'package:diabetes_app/loading.dart';
 import 'package:diabetes_app/login/auth_notifier.dart';
-import 'package:diabetes_app/login/login_api.dart';
 import 'package:diabetes_app/medicine/medicine.dart';
 import 'package:diabetes_app/medicine/medicine_api.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
@@ -85,7 +84,7 @@ class _AboutPageState extends State<AboutPage> {
     });
 
     await uploadProfileAndImage(
-        profileNotifier.profileList[0], true, _imageFile, _onProfileUploaded);
+        profileNotifier.currentProfile, true, _imageFile, _onProfileUploaded);
 
     setState(() {
       loading = false;
@@ -103,12 +102,12 @@ class _AboutPageState extends State<AboutPage> {
     ExerciseNotifier exerciseNotifier = Provider.of<ExerciseNotifier>(context);
     RecordNotifier recordNotifier = Provider.of<RecordNotifier>(context);
 
-    String oldName = profileNotifier.profileList.elementAt(0)?.name;
+    String oldName = profileNotifier.currentProfile?.name;
 
     _formKey.currentState.save();
 
     if (newPassword != "" &&
-        oldName != profileNotifier.profileList.elementAt(0)?.name) {
+        oldName != profileNotifier.currentProfile?.name) {
       currentPassword = "";
 
       await createAlertDialog4(context, 'Validate',
@@ -122,7 +121,7 @@ class _AboutPageState extends State<AboutPage> {
         try {
           UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
           userUpdateInfo.displayName =
-              profileNotifier.profileList.elementAt(0)?.name;
+              profileNotifier.currentProfile?.name;
 
           authNotifier.user.updateProfile(userUpdateInfo);
 
@@ -131,33 +130,33 @@ class _AboutPageState extends State<AboutPage> {
                   email: authNotifier.user.email, password: currentPassword));
           authNotifier.user.updatePassword(newPassword);
 
-          uploadProfile(profileNotifier.profileList.elementAt(0), true,
+          uploadProfile(profileNotifier.currentProfile, true,
               _onProfileUploaded,
               imageUrl: null);
 
           for (Medicine medicine in medicineNotifier.medicineList) {
-            medicine.user = profileNotifier.profileList.elementAt(0)?.name;
+            medicine.user = profileNotifier.currentProfile?.name;
             uploadMedicine(medicine, true, _onMedicineUploaded);
           }
 
           for (Exercise exercise in exerciseNotifier.exerciseList) {
-            exercise.user = profileNotifier.profileList.elementAt(0)?.name;
+            exercise.user = profileNotifier.currentProfile?.name;
             updateExercise(exercise);
           }
 
           for (Record record in recordNotifier.recordList) {
-            record.name = profileNotifier.profileList.elementAt(0)?.name;
+            record.name = profileNotifier.currentProfile?.name;
             updateRecord(record);
           }
 
           createAlertDialog2(context, 'Success',
               'Your password and name have been sucessfully updated.');
         } catch (error) {
-          profileNotifier.profileList.elementAt(0)?.name = oldName;
+          profileNotifier.currentProfile?.name = oldName;
           await createAlertDialog2(context, 'Error', error.toString());
         }
       }
-    } else if (oldName != profileNotifier.profileList.elementAt(0)?.name) {
+    } else if (oldName != profileNotifier.currentProfile?.name) {
       setState(() {
         loading = true;
       });
@@ -170,26 +169,26 @@ class _AboutPageState extends State<AboutPage> {
       });
       UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
       userUpdateInfo.displayName =
-          profileNotifier.profileList.elementAt(0)?.name;
+          profileNotifier.currentProfile?.name;
       authNotifier.user.updateProfile(userUpdateInfo);
       authNotifier.user.reload();
 
       uploadProfile(
-          profileNotifier.profileList.elementAt(0), true, _onProfileUploaded,
+          profileNotifier.currentProfile, true, _onProfileUploaded,
           imageUrl: null);
 
       for (Medicine medicine in medicineNotifier.medicineList) {
-        medicine.user = profileNotifier.profileList.elementAt(0)?.name;
+        medicine.user = profileNotifier.currentProfile?.name;
         uploadMedicine(medicine, true, _onMedicineUploaded);
       }
 
       for (Exercise exercise in exerciseNotifier.exerciseList) {
-        exercise.user = profileNotifier.profileList.elementAt(0)?.name;
+        exercise.user = profileNotifier.currentProfile?.name;
         updateExercise(exercise);
       }
 
       for (Record record in recordNotifier.recordList) {
-        record.name = profileNotifier.profileList.elementAt(0)?.name;
+        record.name = profileNotifier.currentProfile?.name;
         updateRecord(record);
       }
     } else if (newPassword != "") {
@@ -341,12 +340,9 @@ class _AboutPageState extends State<AboutPage> {
               child: Column(children: <Widget>[
                 CircleAvatar(
                   maxRadius: 90,
-                  backgroundImage: NetworkImage(profileNotifier
-                          .profileList.isEmpty
-                      ? 'wow'
-                      : profileNotifier.profileList.elementAt(0)?.image != ""
-                          ? profileNotifier.profileList.elementAt(0)?.image
-                          : 'https://www.sackettwaconia.com/wp-content/uploads/default-profile.png'),
+                  backgroundImage: NetworkImage(profileNotifier.currentProfile?.image != null
+                          ? profileNotifier.currentProfile?.image
+                          : 'user'),
                 ),
                 OutlineButton(
                   onPressed: _getLocalImage,
@@ -363,7 +359,7 @@ class _AboutPageState extends State<AboutPage> {
                           TextFormField(
                             decoration: InputDecoration(labelText: 'Name'),
                             initialValue:
-                                profileNotifier.profileList.elementAt(0)?.name,
+                                profileNotifier.currentProfile?.name,
                             keyboardType: TextInputType.text,
                             style: TextStyle(fontSize: 15),
                             validator: (String value) {
@@ -373,7 +369,7 @@ class _AboutPageState extends State<AboutPage> {
                               return null;
                             },
                             onSaved: (String value) {
-                              profileNotifier.profileList.elementAt(0)?.name =
+                              profileNotifier.currentProfile?.name =
                                   value;
                             },
                           ),

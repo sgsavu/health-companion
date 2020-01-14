@@ -1,5 +1,4 @@
 import 'package:diabetes_app/app.dart';
-import 'package:diabetes_app/exercises/exercise.dart';
 import 'package:diabetes_app/exercises/exercise_api.dart';
 import 'package:diabetes_app/exercises/exercise_form.dart';
 import 'package:diabetes_app/exercises/exercise_notifier.dart';

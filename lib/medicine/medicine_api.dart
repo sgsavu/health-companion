@@ -1,12 +1,10 @@
 import 'dart:io';
-import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
 import 'package:diabetes_app/medicine/medicine.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
-import 'package:diabetes_app/profile.dart';
 
 
 

@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 backgroundColor: Colors.green),
             BottomNavigationBarItem(
                 icon: Icon(Icons.message),
-                title: Text('Notifications'),
+                title: Text('Notifications',style: TextStyle(fontSize: 12.5),),
                 backgroundColor: Colors.purple),
           ],
           onTap: (index) {
