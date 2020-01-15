@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'package:diabetes_app/profile.dart';
+import 'package:diabetes_app/profile/profile.dart';
 import 'package:flutter/cupertino.dart';
 
 class ProfileNotifier with ChangeNotifier{

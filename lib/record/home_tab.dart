@@ -1,12 +1,13 @@
 import 'package:diabetes_app/about.dart';
+import 'package:diabetes_app/global_api.dart';
 import 'package:diabetes_app/loading.dart';
 import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/login/login_api.dart';
 import 'package:diabetes_app/medicine/medicine.dart';
 import 'package:diabetes_app/medicine/medicine_api.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
-import 'package:diabetes_app/profile_api.dart';
-import 'package:diabetes_app/profile_notifier.dart';
+import 'package:diabetes_app/profile/profile_api.dart';
+import 'package:diabetes_app/profile/profile_notifier.dart';
 import 'package:diabetes_app/record/record.dart';
 import 'package:diabetes_app/record/record_api.dart';
 import 'package:diabetes_app/record/record_notifier.dart';
@@ -24,7 +25,7 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   List<DropdownMenuItem<Medicine>> _dropdownMenuItems;
   final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
-  Medicine _selectedCompany;
+  Medicine _selectedMedicine;
   bool canShow = false;
   String currentPassword ="";
   bool loading = false;
@@ -48,7 +49,6 @@ class _HomeTabState extends State<HomeTab> {
     getProfile(profileNotifier,authNotifier.user.email);
 
 
-
     super.initState();
   }
 
@@ -56,6 +56,7 @@ class _HomeTabState extends State<HomeTab> {
   buildDropDownMenuItems(List medicine) {
     List<DropdownMenuItem<Medicine>> items = List();
     for (Medicine medicine in medicine) {
+
       items.add(DropdownMenuItem(
         value: medicine,
         child: Text(medicine.name),
@@ -64,9 +65,9 @@ class _HomeTabState extends State<HomeTab> {
     return items;
   }
 
-  onChangeDropdownItem(Medicine selectedCompany) {
+  onChangeDropdownItem(Medicine selectedMedicine) {
     setState(() {
-      _selectedCompany = selectedCompany;
+      _selectedMedicine = selectedMedicine;
       canShow=true;
     });
   }
@@ -97,7 +98,7 @@ class _HomeTabState extends State<HomeTab> {
                       .push(MaterialPageRoute(builder: (BuildContext context) {
                     return RecordForm(
                         bro: authNotifier.user.displayName,
-                        type: _selectedCompany.name,
+                        type: _selectedMedicine.name,
                         email: authNotifier.user.email);
                   }));
                 },
@@ -107,53 +108,102 @@ class _HomeTabState extends State<HomeTab> {
         });
   }
 
-  createAlertDialog4(BuildContext context, String title, String message) {
+  createAlertDialogCustomForm(BuildContext context) {
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Form(
-              key: _formKey2,
-              autovalidate: true,
-              child: Column(
+          return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              elevation: 0.0,
+              backgroundColor: Colors.transparent,
+              child: Stack(
                 children: <Widget>[
-                  Text(message),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Current Password',
-                    ),
-                    keyboardType: TextInputType.text,
-                    style: TextStyle(fontSize: 15),
-                    obscureText: true,
-                    validator: (String value) {
-                      return null;
-                    },
-                    onSaved: (String value) {
-                      currentPassword = value;
-                    },
+                  Container(
+                      padding: EdgeInsets.only(
+                        top: 66.0 + 16.0,
+                        bottom: 16,
+                        left: 16,
+                        right: 16,
+                      ),
+                      margin: EdgeInsets.only(top: 66.0),
+                      decoration: new BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10.0,
+                            offset: const Offset(0.0, 10.0),
+                          ),
+                        ],
+                      ),
+                      child: SingleChildScrollView(
+                        child:
+                        Column(
+                          mainAxisSize: MainAxisSize.min, // To make the card compact
+                          children: <Widget>[
+                            Text(
+                              'Warning',
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 16.0),
+                            Text(
+                              'Please enter your current password to validate identity:',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            Form(
+                              key: _formKey2,
+                              child:
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'Current Password',
+                                ),
+                                keyboardType: TextInputType.text,
+                                style: TextStyle(fontSize: 15),
+                                obscureText: true,
+                                validator: (String value) {
+                                  return null;
+                                },
+                                onSaved: (String value) {
+                                  currentPassword = value;
+                                },
+                              ),),
+                            SizedBox(height: 24.0),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: FlatButton(
+                                onPressed: () => {
+                                  Navigator.of(context).pop(), // To close the dialog
+                                  _formKey2.currentState.save(),
+                                },
+                                child: Text('Submit'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundImage: NetworkImage('https://www.vippng.com/png/detail/19-195880_triangle-warning-sign.png'),
+                        backgroundColor: Colors.blueAccent,
+                        maxRadius: 66,
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Back'),
-                onPressed: () {
-                  setState(() {
-                    loading = false;
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              FlatButton(
-                child: Text('Submit'),
-                onPressed: () {
-                  _formKey2.currentState.save();
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+              )
           );
         });
   }
@@ -166,8 +216,7 @@ class _HomeTabState extends State<HomeTab> {
     RecordNotifier recordNotifier = Provider.of<RecordNotifier>(context);
     MedicineNotifier medicineNotifier = Provider.of<MedicineNotifier>(context);
 
-    await createAlertDialog4(context, 'Validate',
-        'Please type in your current password to validate.');
+    await createAlertDialogCustomForm(context);
     if (currentPassword != "") {
       setState(() {
         loading = true;
@@ -195,37 +244,19 @@ class _HomeTabState extends State<HomeTab> {
         authNotifier.user.delete();
 
 
-        await createAlertDialog2(context, 'Success',
-            'Your account has been deleted');
+        await createAlertDialogCustom(context, 'Success',
+            'Your account has been deleted','https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png');
         signout(authNotifier);
 
       } catch (error) {
-        await createAlertDialog2(context, 'Error', error.toString());
+        await createAlertDialogCustom(context, 'Error', error.toString(),'https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png');
     }
+
+      setState(() {
+        loading = false;
+      });
+
     }
-  }
-  createAlertDialog2(BuildContext context, String title, String message) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Container(
-              child: Text(message),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  setState(() {
-                    loading = false;
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
   }
 
 
@@ -258,7 +289,6 @@ class _HomeTabState extends State<HomeTab> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
@@ -267,6 +297,7 @@ class _HomeTabState extends State<HomeTab> {
     ProfileNotifier profileNotifier = Provider.of<ProfileNotifier>(context);
 
     _dropdownMenuItems = buildDropDownMenuItems(medicineNotifier.medicineList);
+
 
 
       return loading?Loading():Container(
@@ -302,7 +333,8 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                         OutlineButton(
                           child: DropdownButton(
-                            value: _selectedCompany,
+                            hint: Text('Medicine'),
+                            value: _selectedMedicine,
                             items: _dropdownMenuItems,
                             onChanged: onChangeDropdownItem,
                           ),
@@ -401,7 +433,15 @@ class _HomeTabState extends State<HomeTab> {
                       onTap: () => {Navigator.of(context)
                           .push(MaterialPageRoute(builder: (BuildContext context) {
                       return AboutPage();
-                      }))},
+                      })),
+
+                      setState(() {
+                      _selectedMedicine = null;
+                      canShow=false;
+                      })
+                      },
+
+
                     ),
                     Divider(
                       color: Colors.black,

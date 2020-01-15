@@ -3,14 +3,15 @@ import 'dart:io';
 import 'package:diabetes_app/exercises/exercise.dart';
 import 'package:diabetes_app/exercises/exercise_api.dart';
 import 'package:diabetes_app/exercises/exercise_notifier.dart';
+import 'package:diabetes_app/global_api.dart';
 import 'package:diabetes_app/loading.dart';
 import 'package:diabetes_app/login/auth_notifier.dart';
 import 'package:diabetes_app/medicine/medicine.dart';
 import 'package:diabetes_app/medicine/medicine_api.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
-import 'package:diabetes_app/profile.dart';
-import 'package:diabetes_app/profile_api.dart';
-import 'package:diabetes_app/profile_notifier.dart';
+import 'package:diabetes_app/profile/profile.dart';
+import 'package:diabetes_app/profile/profile_api.dart';
+import 'package:diabetes_app/profile/profile_notifier.dart';
 import 'package:diabetes_app/record/record.dart';
 import 'package:diabetes_app/record/record_api.dart';
 import 'package:diabetes_app/record/record_notifier.dart';
@@ -110,8 +111,7 @@ class _AboutPageState extends State<AboutPage> {
         oldName != profileNotifier.currentProfile?.name) {
       currentPassword = "";
 
-      await createAlertDialog4(context, 'Validate',
-          'Please type in your current password to validate.');
+      await createAlertDialogCustomForm(context);
 
       if (currentPassword != "") {
         setState(() {
@@ -149,12 +149,18 @@ class _AboutPageState extends State<AboutPage> {
             updateRecord(record);
           }
 
-          createAlertDialog2(context, 'Success',
-              'Your password and name have been sucessfully updated.');
+          createAlertDialogCustom(context, 'Success',
+              'Your password and name have been sucessfully updated.','https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png');
         } catch (error) {
           profileNotifier.currentProfile?.name = oldName;
-          await createAlertDialog2(context, 'Error', error.toString());
+          await createAlertDialogCustom(context, 'Error', error.toString(),'https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png');
         }
+
+
+        setState(() {
+          loading = false;
+        });
+
       }
     } else if (oldName != profileNotifier.currentProfile?.name) {
       setState(() {
@@ -194,8 +200,7 @@ class _AboutPageState extends State<AboutPage> {
     } else if (newPassword != "") {
       currentPassword = "";
 
-      await createAlertDialog4(context, 'Validate',
-          'Please type in your current password to validate.');
+      await createAlertDialogCustomForm(context);
       if (currentPassword != "") {
         setState(() {
           loading = true;
@@ -206,108 +211,116 @@ class _AboutPageState extends State<AboutPage> {
               EmailAuthProvider.getCredential(
                   email: authNotifier.user.email, password: currentPassword));
           authNotifier.user.updatePassword(newPassword);
-          createAlertDialog2(context, 'Success',
-              'Your password has been sucessfully updated.');
+          createAlertDialogCustom(context, 'Success',
+              'Your password has been sucessfully updated.','https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png');
         } catch (error) {
-          await createAlertDialog2(context, 'Error', error.toString());
+          await createAlertDialogCustom(context, 'Error', error.toString(),'https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png');
         }
+
+        setState(() {
+          loading = false;
+        });
+
       }
     }
   }
 
-  createAlertDialog4(BuildContext context, String title, String message) {
+  createAlertDialogCustomForm(BuildContext context) {
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Form(
-              key: _formKey2,
-              autovalidate: true,
-              child: Column(
+          return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              elevation: 0.0,
+              backgroundColor: Colors.transparent,
+              child: Stack(
                 children: <Widget>[
-                  Text(message),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Current Password',
-                    ),
-                    keyboardType: TextInputType.text,
-                    style: TextStyle(fontSize: 15),
-                    obscureText: true,
-                    validator: (String value) {
-                      return null;
-                    },
-                    onSaved: (String value) {
-                      currentPassword = value;
-                    },
+                  Container(
+                      padding: EdgeInsets.only(
+                        top: 66.0 + 16.0,
+                        bottom: 16,
+                        left: 16,
+                        right: 16,
+                      ),
+                      margin: EdgeInsets.only(top: 66.0),
+                      decoration: new BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10.0,
+                            offset: const Offset(0.0, 10.0),
+                          ),
+                        ],
+                      ),
+                      child: SingleChildScrollView(
+                        child:
+                        Column(
+                          mainAxisSize: MainAxisSize.min, // To make the card compact
+                          children: <Widget>[
+                            Text(
+                              'Warning',
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 16.0),
+                            Text(
+                              'Please enter your current password to validate identity:',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            Form(
+                              key: _formKey2,
+                              child:
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'Current Password',
+                                ),
+                                keyboardType: TextInputType.text,
+                                style: TextStyle(fontSize: 15),
+                                obscureText: true,
+                                validator: (String value) {
+                                  return null;
+                                },
+                                onSaved: (String value) {
+                                  currentPassword = value;
+                                },
+                              ),),
+                            SizedBox(height: 24.0),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: FlatButton(
+                                onPressed: () => {
+                                  Navigator.of(context).pop(), // To close the dialog
+                                  _formKey2.currentState.save(),
+                                },
+                                child: Text('Submit'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundImage: NetworkImage('https://www.vippng.com/png/detail/19-195880_triangle-warning-sign.png'),
+                        backgroundColor: Colors.blueAccent,
+                        maxRadius: 66,
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Back'),
-                onPressed: () {
-                  setState(() {
-                    loading = false;
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              FlatButton(
-                child: Text('Submit'),
-                onPressed: () {
-                  _formKey2.currentState.save();
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
-  }
-
-  createAlertDialog(BuildContext context, String title, String message) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Container(
-              child: Text(message),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
-  }
-
-  createAlertDialog2(BuildContext context, String title, String message) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Container(
-              child: Text(message),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  setState(() {
-                    loading = false;
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+              )
           );
         });
   }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diabetes_app/loading.dart';
 import 'package:diabetes_app/resetpassword.dart';
-import 'package:diabetes_app/profile.dart';
+import 'package:diabetes_app/profile/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'login_api.dart';

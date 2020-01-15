@@ -1,0 +1,519 @@
+@startuml
+set namespaceSeparator ::
+
+class "diabetes_app::about.dart::AboutPage" {
+  +_AboutPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::about.dart::AboutPage"
+
+class "diabetes_app::about.dart::_AboutPageState" {
+  -File _imageFile
+  +String newPassword
+  +String currentPassword
+  +bool loading
+  -GlobalKey<FormState> _formKey
+  -GlobalKey<FormState> _formKey2
+  -TextEditingController _passwordController
+  +void initState()
+  -dynamic _onProfileUploaded()
+  -dynamic _getLocalImage()
+  -dynamic _saveProfile()
+  +dynamic createAlertDialog4()
+  +dynamic createAlertDialog()
+  +dynamic createAlertDialog2()
+  -dynamic _onMedicineUploaded()
+  +Widget build()
+}
+
+"diabetes_app::about.dart::_AboutPageState" o-- "dart::io::File"
+"diabetes_app::about.dart::_AboutPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"diabetes_app::about.dart::_AboutPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::about.dart::_AboutPageState"
+
+class "diabetes_app::app.dart::HomePage" {
+  +_HomePageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::app.dart::HomePage"
+
+class "diabetes_app::app.dart::_HomePageState" {
+  -int _currentIndex
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::app.dart::_HomePageState"
+"flutter::src::widgets::ticker_provider.dart::SingleTickerProviderStateMixin<T>" <|-- "diabetes_app::app.dart::_HomePageState"
+
+class "diabetes_app::diet::diet_api.dart::APIService" {
+  {static} +APIService instance
+  -String _baseUrl
+  {static} +String API_KEY
+  +Future generateMealPlan()
+  +Future fetchRecipe()
+}
+
+"diabetes_app::diet::diet_api.dart::APIService" o-- "diabetes_app::diet::diet_api.dart::APIService"
+
+class "diabetes_app::diet::diet_tab.dart::DietTab" {
+  +_DietTabState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::diet::diet_tab.dart::DietTab"
+
+class "diabetes_app::diet::diet_tab.dart::_DietTabState" {
+  -List<String> _diets
+  -double _targetCalories
+  -String _diet
+  -void _searchMealPlan()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::diet::diet_tab.dart::_DietTabState"
+
+class "diabetes_app::diet::meal.dart::Meal" {
+  +int id
+  +String title
+  +String imageUrl
+}
+
+class "diabetes_app::diet::meals_screen.dart::MealsScreen" {
+  +MealPlan mealPlan
+  +_MealsScreenState createState()
+}
+
+"diabetes_app::diet::meals_screen.dart::MealsScreen" o-- "diabetes_app::diet::meal_plan.dart::MealPlan"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::diet::meals_screen.dart::MealsScreen"
+
+class "diabetes_app::diet::meals_screen.dart::_MealsScreenState" {
+  -dynamic _buildTotalNutrientsCard()
+  -dynamic _buildMealCard()
+  -dynamic _mealType()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::diet::meals_screen.dart::_MealsScreenState"
+
+class "diabetes_app::diet::meal_plan.dart::MealPlan" {
+  +List<Meal> meals
+  +double calories
+  +double carbs
+  +double fat
+  +double protein
+}
+
+class "diabetes_app::diet::recipe.dart::Recipe" {
+  +String spoonacularSourceUrl
+}
+
+class "diabetes_app::diet::recipe_screen.dart::RecipeScreen" {
+  +String mealType
+  +Recipe recipe
+  +_RecipeScreenState createState()
+}
+
+"diabetes_app::diet::recipe_screen.dart::RecipeScreen" o-- "diabetes_app::diet::recipe.dart::Recipe"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::diet::recipe_screen.dart::RecipeScreen"
+
+class "diabetes_app::diet::recipe_screen.dart::_RecipeScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::diet::recipe_screen.dart::_RecipeScreenState"
+
+class "diabetes_app::exercises::exercise.dart::Exercise" {
+  +String user
+  +String userEmail
+  +String id
+  +String name
+  +String type
+  +String set1
+  +String set2
+  +String set3
+  +String set4
+  +String set5
+  +Timestamp createdAt
+  +Timestamp updatedAt
+  +Map toMap()
+}
+
+"diabetes_app::exercises::exercise.dart::Exercise" o-- "cloud_firestore::cloud_firestore.dart::Timestamp"
+
+class "diabetes_app::exercises::exercise_form.dart::ExerciseForm" {
+  +_ExerciseFormState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::exercises::exercise_form.dart::ExerciseForm"
+
+class "diabetes_app::exercises::exercise_form.dart::_ExerciseFormState" {
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::exercises::exercise_form.dart::_ExerciseFormState"
+
+class "diabetes_app::exercises::exercise_notifier.dart::ExerciseNotifier" {
+  -List<Exercise> _exerciseList
+  -Exercise _currentExercise
+  +UnmodifiableListView<Exercise> exerciseList
+  +Exercise currentExercise
+}
+
+"diabetes_app::exercises::exercise_notifier.dart::ExerciseNotifier" o-- "diabetes_app::exercises::exercise.dart::Exercise"
+"diabetes_app::exercises::exercise_notifier.dart::ExerciseNotifier" o-- "dart::collection::UnmodifiableListView<Exercise>"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "diabetes_app::exercises::exercise_notifier.dart::ExerciseNotifier"
+
+class "diabetes_app::exercises::exercise_tab.dart::ExerciseTab" {
+  +_ExerciseTabState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::exercises::exercise_tab.dart::ExerciseTab"
+
+class "diabetes_app::exercises::exercise_tab.dart::_ExerciseTabState" {
+  -FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin
+  +Future<List<PendingNotificationRequest>> notificationFuture
+  +bool canShow
+  +bool showButton
+  +TimeOfDay selectedTime
+  +int selectedIndex
+  +void initState()
+  +Widget build()
+  +Future getScheduledNotifications()
+  +Future navigateToNotificationCreation()
+  +bool checkIfIdExists()
+  +Future showDailyAtTime()
+  +void refreshNotification()
+  -void _initializeNotifications()
+  +Future onSelectNotification()
+  +Future selectTime()
+}
+
+"diabetes_app::exercises::exercise_tab.dart::_ExerciseTabState" o-- "flutter_local_notifications::src::flutter_local_notifications.dart::FlutterLocalNotificationsPlugin"
+"diabetes_app::exercises::exercise_tab.dart::_ExerciseTabState" o-- "flutter::src::material::time.dart::TimeOfDay"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::exercises::exercise_tab.dart::_ExerciseTabState"
+
+class "diabetes_app::loading.dart::Loading" {
+  +SpinKitFadingCircle spinkit
+  +Widget build()
+}
+
+"diabetes_app::loading.dart::Loading" o-- "flutter_spinkit::src::fading_circle.dart::SpinKitFadingCircle"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "diabetes_app::loading.dart::Loading"
+
+class "diabetes_app::login::auth_notifier.dart::AuthNotifier" {
+  -FirebaseUser _user
+  +FirebaseUser user
+  +void setUser()
+}
+
+"diabetes_app::login::auth_notifier.dart::AuthNotifier" o-- "firebase_auth::firebase_auth.dart::FirebaseUser"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "diabetes_app::login::auth_notifier.dart::AuthNotifier"
+
+class "diabetes_app::login::login.dart::AuthMode" {
+  +int index
+  {static} +List<AuthMode> values
+  {static} +AuthMode Signup
+  {static} +AuthMode Login
+}
+
+"diabetes_app::login::login.dart::AuthMode" o-- "diabetes_app::login::login.dart::AuthMode"
+
+class "diabetes_app::login::login.dart::Login" {
+  +State createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::login::login.dart::Login"
+
+class "diabetes_app::login::login.dart::_LoginState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _passwordController
+  -AuthMode _authMode
+  +bool loading
+  -User _user
+  +void initState()
+  +dynamic login()
+  +dynamic createAlertDialog()
+  +dynamic signup()
+  -void _submitForm()
+  -Widget _buildDisplayNameField()
+  -Widget _buildEmailField()
+  -Widget _buildPasswordField()
+  -Widget _buildConfirmPasswordField()
+  +Widget build()
+}
+
+"diabetes_app::login::login.dart::_LoginState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"diabetes_app::login::login.dart::_LoginState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"diabetes_app::login::login.dart::_LoginState" o-- "diabetes_app::login::login.dart::AuthMode"
+"diabetes_app::login::login.dart::_LoginState" o-- "diabetes_app::login::user.dart::User"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::login::login.dart::_LoginState"
+
+class "diabetes_app::login::user.dart::User" {
+  +String displayName
+  +String email
+  +String password
+}
+
+class "diabetes_app::main.dart::MyApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "diabetes_app::main.dart::MyApp"
+
+class "diabetes_app::medicine::medicine.dart::Medicine" {
+  +String user
+  +String userEmail
+  +String id
+  +String name
+  +String image
+  +String intake
+  +String category
+  +String description
+  +Timestamp createdAt
+  +Timestamp updatedAt
+  +Map toMap()
+}
+
+"diabetes_app::medicine::medicine.dart::Medicine" o-- "cloud_firestore::cloud_firestore.dart::Timestamp"
+
+class "diabetes_app::medicine::medicine_detail.dart::MedicineDetail" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "diabetes_app::medicine::medicine_detail.dart::MedicineDetail"
+
+class "diabetes_app::medicine::medicine_form.dart::MedicineForm" {
+  +bool isUpdating
+  +_MedicineFormState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::medicine::medicine_form.dart::MedicineForm"
+
+class "diabetes_app::medicine::medicine_form.dart::_MedicineFormState" {
+  -GlobalKey<FormState> _formKey
+  -Medicine _currentMedicine
+  -String _imageUrl
+  -File _imageFile
+  +void initState()
+  -Widget _showImage()
+  -dynamic _getLocalImage()
+  -Widget _buildNameField()
+  -Widget _buildCategoryField()
+  -Widget _buildIntakeField()
+  -Widget _buildDescriptionField()
+  -dynamic _onMedicineUploaded()
+  -dynamic _saveMedicine()
+  +Widget build()
+}
+
+"diabetes_app::medicine::medicine_form.dart::_MedicineFormState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"diabetes_app::medicine::medicine_form.dart::_MedicineFormState" o-- "diabetes_app::medicine::medicine.dart::Medicine"
+"diabetes_app::medicine::medicine_form.dart::_MedicineFormState" o-- "dart::io::File"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::medicine::medicine_form.dart::_MedicineFormState"
+
+class "diabetes_app::medicine::medicine_notifier.dart::MedicineNotifier" {
+  -List<Medicine> _medicineList
+  -Medicine _currentMedicine
+  +UnmodifiableListView<Medicine> medicineList
+  +Medicine currentMedicine
+  +dynamic addMedicine()
+  +dynamic deleteMedicine()
+}
+
+"diabetes_app::medicine::medicine_notifier.dart::MedicineNotifier" o-- "diabetes_app::medicine::medicine.dart::Medicine"
+"diabetes_app::medicine::medicine_notifier.dart::MedicineNotifier" o-- "dart::collection::UnmodifiableListView<Medicine>"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "diabetes_app::medicine::medicine_notifier.dart::MedicineNotifier"
+
+class "diabetes_app::medicine::medicine_tab.dart::MedicineTab" {
+  +_MedicineTabState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::medicine::medicine_tab.dart::MedicineTab"
+
+class "diabetes_app::medicine::medicine_tab.dart::_MedicineTabState" {
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::medicine::medicine_tab.dart::_MedicineTabState"
+
+class "diabetes_app::notifications::create_notification_page.dart::CreateNotificationPage" {
+  +_CreateNotificationPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::notifications::create_notification_page.dart::CreateNotificationPage"
+
+class "diabetes_app::notifications::create_notification_page.dart::_CreateNotificationPageState" {
+  +TimeOfDay selectedTime
+  -List<DropdownMenuItem<Medicine>> _dropdownMenuItems
+  -Medicine _selectedCompany
+  +void initState()
+  +dynamic buildDropDownMenuItems()
+  +dynamic onChangeDropdownItem()
+  +Widget build()
+  +Future selectTime()
+  +void createNotification()
+}
+
+"diabetes_app::notifications::create_notification_page.dart::_CreateNotificationPageState" o-- "flutter::src::material::time.dart::TimeOfDay"
+"diabetes_app::notifications::create_notification_page.dart::_CreateNotificationPageState" o-- "diabetes_app::medicine::medicine.dart::Medicine"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::notifications::create_notification_page.dart::_CreateNotificationPageState"
+
+class "diabetes_app::notifications::notifications_tab.dart::NotificationsTab" {
+  +_NotificationsTabState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::notifications::notifications_tab.dart::NotificationsTab"
+
+class "diabetes_app::notifications::notifications_tab.dart::_NotificationsTabState" {
+  -FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin
+  +Future<List<PendingNotificationRequest>> notificationFuture
+  +void initState()
+  +Widget build()
+  +Future showDailyAtTime()
+  +Future getScheduledNotifications()
+  +Future cancelNotification()
+  +bool checkIfIdExists()
+  -void _initializeNotifications()
+  +Future onSelectNotification()
+  +Future dismissNotification()
+  +void refreshNotification()
+  +Future navigateToNotificationCreation()
+}
+
+"diabetes_app::notifications::notifications_tab.dart::_NotificationsTabState" o-- "flutter_local_notifications::src::flutter_local_notifications.dart::FlutterLocalNotificationsPlugin"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::notifications::notifications_tab.dart::_NotificationsTabState"
+
+class "diabetes_app::notifications::notification_data.dart::NotificationData" {
+  +String title
+  +String description
+  +Time time
+}
+
+"diabetes_app::notifications::notification_data.dart::NotificationData" o-- "flutter_local_notifications::src::flutter_local_notifications.dart::Time"
+
+class "diabetes_app::notifications::notification_tile.dart::NotificationTile" {
+  +PendingNotificationRequest notification
+  +dynamic Function(int) deleteNotification
+  +SizedBox smallHeight
+  +Widget build()
+}
+
+"diabetes_app::notifications::notification_tile.dart::NotificationTile" o-- "flutter_local_notifications::src::pending_notification_request.dart::PendingNotificationRequest"
+"diabetes_app::notifications::notification_tile.dart::NotificationTile" o-- "diabetes_app::notifications::notification_tile.dart::dynamic Function(int)"
+"diabetes_app::notifications::notification_tile.dart::NotificationTile" o-- "flutter::src::widgets::basic.dart::SizedBox"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "diabetes_app::notifications::notification_tile.dart::NotificationTile"
+
+class "diabetes_app::profile::profile.dart::Profile" {
+  +String id
+  +String image
+  +String email
+  +String name
+  +Timestamp createdAt
+  +Timestamp updatedAt
+  +Map toMap()
+}
+
+"diabetes_app::profile::profile.dart::Profile" o-- "cloud_firestore::cloud_firestore.dart::Timestamp"
+
+class "diabetes_app::profile::profile_notifier.dart::ProfileNotifier" {
+  -List<Profile> _profileList
+  -Profile _currentProfile
+  +Profile currentProfile
+  +dynamic addProfile()
+  +dynamic deleteProfile()
+}
+
+"diabetes_app::profile::profile_notifier.dart::ProfileNotifier" o-- "diabetes_app::profile::profile.dart::Profile"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "diabetes_app::profile::profile_notifier.dart::ProfileNotifier"
+
+class "diabetes_app::record::home_tab.dart::HomeTab" {
+  +_HomeTabState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::record::home_tab.dart::HomeTab"
+
+class "diabetes_app::record::home_tab.dart::_HomeTabState" {
+  -List<DropdownMenuItem<Medicine>> _dropdownMenuItems
+  -GlobalKey<FormState> _formKey2
+  -Medicine _selectedCompany
+  +bool canShow
+  +String currentPassword
+  +bool loading
+  +void initState()
+  +dynamic buildDropDownMenuItems()
+  +dynamic onChangeDropdownItem()
+  +dynamic createAlertDialog()
+  +dynamic createAlertDialog4()
+  +dynamic deleteAccountandData()
+  +dynamic createAlertDialog2()
+  +dynamic createAlertDialogDeletion()
+  +Widget build()
+}
+
+"diabetes_app::record::home_tab.dart::_HomeTabState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"diabetes_app::record::home_tab.dart::_HomeTabState" o-- "diabetes_app::medicine::medicine.dart::Medicine"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::record::home_tab.dart::_HomeTabState"
+
+class "diabetes_app::record::record.dart::Record" {
+  +String id
+  +String name
+  +String type
+  +String email
+  +Timestamp createdAt
+  +Map toMap()
+}
+
+"diabetes_app::record::record.dart::Record" o-- "cloud_firestore::cloud_firestore.dart::Timestamp"
+
+class "diabetes_app::record::record_form.dart::RecordForm" {
+  +String bro
+  +String type
+  +String email
+  +_RecordFormState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::record::record_form.dart::RecordForm"
+
+class "diabetes_app::record::record_form.dart::_RecordFormState" {
+  -Record _currentRecord
+  +void initState()
+  -dynamic _onRecordUploaded()
+  +Widget build()
+}
+
+"diabetes_app::record::record_form.dart::_RecordFormState" o-- "diabetes_app::record::record.dart::Record"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::record::record_form.dart::_RecordFormState"
+
+class "diabetes_app::record::record_notifier.dart::RecordNotifier" {
+  -List<Record> _recordList
+  -Record _currentRecord
+  +UnmodifiableListView<Record> recordList
+  +Record currentRecord
+  +dynamic addRecord()
+}
+
+"diabetes_app::record::record_notifier.dart::RecordNotifier" o-- "diabetes_app::record::record.dart::Record"
+"diabetes_app::record::record_notifier.dart::RecordNotifier" o-- "dart::collection::UnmodifiableListView<Record>"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "diabetes_app::record::record_notifier.dart::RecordNotifier"
+
+class "diabetes_app::resetpassword.dart::ResetPassword" {
+  +_ResetPasswordState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "diabetes_app::resetpassword.dart::ResetPassword"
+
+class "diabetes_app::resetpassword.dart::_ResetPasswordState" {
+  -GlobalKey<FormState> _formKey
+  +String currentEmail
+  +bool loading
+  -Widget _buildEmailField()
+  +dynamic saveForm()
+  +Widget build()
+}
+
+"diabetes_app::resetpassword.dart::_ResetPasswordState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "diabetes_app::resetpassword.dart::_ResetPasswordState"
+
+
+@enduml
