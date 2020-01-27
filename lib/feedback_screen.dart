@@ -1,50 +1,57 @@
+import 'package:diabetes_app/feedback.dart';
+import 'package:diabetes_app/feedback_api.dart';
 import 'package:diabetes_app/global_api.dart';
 import 'package:diabetes_app/loading.dart';
-import 'package:diabetes_app/login/login_api.dart';
+import 'package:diabetes_app/login/auth_notifier.dart';
+import 'package:diabetes_app/profile/profile_api.dart';
+import 'package:diabetes_app/profile/profile_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ResetPassword extends StatefulWidget {
+class FeedbackScreen extends StatefulWidget {
   @override
-  _ResetPasswordState createState() => _ResetPasswordState();
+  _FeedbackScreenState createState() => _FeedbackScreenState();
 }
 
-class _ResetPasswordState extends State<ResetPassword> {
+class _FeedbackScreenState extends State<FeedbackScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String currentEmail;
+  String currentMessage;
   bool loading=false;
+  FeedbackModel feedbackModel = FeedbackModel();
+
+  void initState() {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    ProfileNotifier profileNotifier =
+    Provider.of<ProfileNotifier>(context, listen: false);
+    getProfile(profileNotifier,authNotifier.user.email);
+  }
 
 
   Widget _buildEmailField() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'Email',
+          labelText: 'Feedback',
           labelStyle: TextStyle(
             fontSize: 15.0,
           ),
-          hintText: 'example@gmail.com',
+          hintText: 'I really love the app.',
           hintStyle: TextStyle(
             color: Colors.grey,
             fontSize: 12.0,
           ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          prefixIcon: Icon(Icons.email)),
+          prefixIcon: Icon(Icons.feedback)),
       cursorColor: Colors.white,
       validator: (String value) {
 
-        if (value.isNotEmpty) {
-          if (!RegExp(
-              r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-              .hasMatch(value)) {
-            return 'Please enter a valid email address';
-          }
-        }
+
 
 
         return null;
       },
       onSaved: (String value) {
-        currentEmail = value;
+        currentMessage = value;
       },
     );
   }
@@ -61,9 +68,15 @@ class _ResetPasswordState extends State<ResetPassword> {
       loading = true;
     });
 
+    ProfileNotifier profileNotifier = Provider.of<ProfileNotifier>(context);
+
+    feedbackModel.userName=profileNotifier.currentProfile.name;
+    feedbackModel.userEmail=profileNotifier.currentProfile.email;
+    feedbackModel.message=currentMessage;
+
     try{
-      await sendPasswordResetEmail(currentEmail);
-      await createAlertDialogCustom(context, 'Success', 'Password reset email has been successfully sent.', NetworkImage('https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png'));
+      uploadFeedback(feedbackModel);
+      await createAlertDialogCustom(context, 'Success', 'Your feedback has been successfully sent to us..', NetworkImage('https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png'));
       Navigator.pop(context);
     }catch (error){
       createAlertDialogCustom(context, 'Error', error.toString(), NetworkImage('https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png'));
@@ -92,7 +105,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'Reset your password',
+                      'Send us your feedback',
                       style: TextStyle(
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold,
@@ -100,7 +113,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     ),
                     SizedBox(height: 50,),
                     Text(
-                      'Please enter your email below:',
+                      'Please enter your message below:',
                       style: TextStyle(
                         fontSize: 15.0,
                       ),

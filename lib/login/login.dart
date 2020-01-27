@@ -106,6 +106,7 @@ class _LoginState extends State<Login> {
       profile.name = user.displayName;
       profile.email = user.email;
       profile.image = "https://www.sackettwaconia.com/wp-content/uploads/default-profile.png";
+      profile.quizScore = 0;
 
       print('uploaded profile succesfully: ${profile.toString()}');
 

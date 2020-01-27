@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-createAlertDialogCustom(BuildContext context, String title, String message, String image) {
+createAlertDialogCustom(BuildContext context, String title, String message, ImageProvider image) {
   return showDialog(
       context: context,
       builder: (context) {
@@ -67,7 +67,7 @@ createAlertDialogCustom(BuildContext context, String title, String message, Stri
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: NetworkImage('${image}'),
+                      backgroundImage: image,
                       backgroundColor: Colors.blueAccent,
                       maxRadius: 66,
                     ),
@@ -78,4 +78,5 @@ createAlertDialogCustom(BuildContext context, String title, String message, Stri
         );
       });
 }
+
 

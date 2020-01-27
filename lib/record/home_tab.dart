@@ -1,4 +1,5 @@
 import 'package:diabetes_app/about.dart';
+import 'package:diabetes_app/feedback_screen.dart';
 import 'package:diabetes_app/global_api.dart';
 import 'package:diabetes_app/loading.dart';
 import 'package:diabetes_app/login/auth_notifier.dart';
@@ -8,6 +9,7 @@ import 'package:diabetes_app/medicine/medicine_api.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
 import 'package:diabetes_app/profile/profile_api.dart';
 import 'package:diabetes_app/profile/profile_notifier.dart';
+import 'package:diabetes_app/quiz_screen.dart';
 import 'package:diabetes_app/record/record.dart';
 import 'package:diabetes_app/record/record_api.dart';
 import 'package:diabetes_app/record/record_notifier.dart';
@@ -245,11 +247,11 @@ class _HomeTabState extends State<HomeTab> {
 
 
         await createAlertDialogCustom(context, 'Success',
-            'Your account has been deleted','https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png');
+            'Your account has been deleted',NetworkImage('https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png'));
         signout(authNotifier);
 
       } catch (error) {
-        await createAlertDialogCustom(context, 'Error', error.toString(),'https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png');
+        await createAlertDialogCustom(context, 'Error', error.toString(),NetworkImage('https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png'));
     }
 
       setState(() {
@@ -442,6 +444,30 @@ class _HomeTabState extends State<HomeTab> {
                       },
 
 
+                    ),
+                    Divider(
+                      color: Colors.black,
+                      height: 5,
+                    ),
+                    ListTile(
+                      title: Text('Diabetes Quiz'),
+                      trailing: Icon(Icons.stars),
+                      onTap: () => {Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (BuildContext context) {
+                        return QuizScreen();
+                      })),},
+                    ),
+                    Divider(
+                      color: Colors.black,
+                      height: 5,
+                    ),
+                    ListTile(
+                      title: Text('Feedback'),
+                      trailing: Icon(Icons.feedback),
+                      onTap: () => {Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (BuildContext context) {
+                        return FeedbackScreen();
+                      })),},
                     ),
                     Divider(
                       color: Colors.black,

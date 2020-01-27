@@ -7,6 +7,7 @@ class Profile {
   String image;
   String email;
   String name;
+  int quizScore;
   Timestamp createdAt;
   Timestamp updatedAt;
 
@@ -19,6 +20,7 @@ class Profile {
     image = data['image'];
     email = data['email'];
     name = data['name'];
+    quizScore = data['quizScore'];
     createdAt = data['createdAt'];
     updatedAt = data['updatedAt'];
 
@@ -30,6 +32,7 @@ class Profile {
       'image':image,
       'email':email,
       'name':name,
+      'quizScore':quizScore,
       'createdAt':createdAt,
       'updatedAt':updatedAt,
 

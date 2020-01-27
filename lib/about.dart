@@ -150,10 +150,10 @@ class _AboutPageState extends State<AboutPage> {
           }
 
           createAlertDialogCustom(context, 'Success',
-              'Your password and name have been sucessfully updated.','https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png');
+              'Your password and name have been sucessfully updated.',NetworkImage('https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png'));
         } catch (error) {
           profileNotifier.currentProfile?.name = oldName;
-          await createAlertDialogCustom(context, 'Error', error.toString(),'https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png');
+          await createAlertDialogCustom(context, 'Error', error.toString(),NetworkImage('https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png'));
         }
 
 
@@ -212,9 +212,9 @@ class _AboutPageState extends State<AboutPage> {
                   email: authNotifier.user.email, password: currentPassword));
           authNotifier.user.updatePassword(newPassword);
           createAlertDialogCustom(context, 'Success',
-              'Your password has been sucessfully updated.','https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png');
+              'Your password has been sucessfully updated.',NetworkImage('https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png'));
         } catch (error) {
-          await createAlertDialogCustom(context, 'Error', error.toString(),'https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png');
+          await createAlertDialogCustom(context, 'Error', error.toString(),NetworkImage('https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png'));
         }
 
         setState(() {

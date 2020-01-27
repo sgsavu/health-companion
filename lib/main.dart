@@ -4,6 +4,7 @@ import 'package:diabetes_app/app.dart';
 import 'package:diabetes_app/login/login.dart';
 import 'package:diabetes_app/medicine/medicine_notifier.dart';
 import 'package:diabetes_app/profile/profile_notifier.dart';
+import 'package:diabetes_app/quiz_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:diabetes_app/record/record_notifier.dart';
@@ -26,6 +27,10 @@ void main() => runApp(MultiProvider(
     ChangeNotifierProvider(
       builder: (context) => ProfileNotifier(),
     ),
+    ChangeNotifierProvider(
+      builder: (context) => QuizNotifier(),
+    ),
+
   ],
   child: MyApp(),
 )
