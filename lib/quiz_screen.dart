@@ -135,8 +135,8 @@ class _QuizScreenState extends State<QuizScreen> {
                           ),
                         ),
                         SizedBox(height: 24.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             FlatButton(
                               onPressed: () => {
@@ -159,11 +159,6 @@ class _QuizScreenState extends State<QuizScreen> {
                               },
                               child: Text('B. ${answer2}'),
                             ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
                             FlatButton(
                               onPressed: () => {
                                 Navigator.pop(context),
@@ -187,7 +182,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               ),
                             ),
                           ],
-                        ),
+                        )
+
                       ],
                     ),
                   ),
@@ -278,6 +274,13 @@ class _QuizScreenState extends State<QuizScreen> {
                         SizedBox(height: 5,),
                         Text(
                           '○ Diabetes tools and gadgets',
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w700
+                          ),
+                        ),SizedBox(height: 5,),
+                        Text(
+                          '○ Nutrition and diabetes',
                           style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w700

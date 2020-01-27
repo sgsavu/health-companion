@@ -63,10 +63,10 @@ class _ResetPasswordState extends State<ResetPassword> {
 
     try{
       await sendPasswordResetEmail(currentEmail);
-      await createAlertDialogCustom(context, 'Success', 'Password reset email has been successfully sent.', NetworkImage('https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png'));
+      await createAlertDialogCustom(context, 'Success', 'Password reset email has been successfully sent.', AssetImage('assets/check.png'));
       Navigator.pop(context);
     }catch (error){
-      createAlertDialogCustom(context, 'Error', error.toString(), NetworkImage('https://www.elegantthemes.com/blog/wp-content/uploads/2016/03/500-internal-server-error-featured-image-1.png'));
+      createAlertDialogCustom(context, 'Error', error.toString(), AssetImage('assets/wrong.png'));
     }
 
     setState(() {

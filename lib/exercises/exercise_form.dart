@@ -21,7 +21,7 @@ class _ExerciseFormState extends State<ExerciseForm>{
     Future.delayed(const Duration(milliseconds: 1000), () {
 
       Navigator.pop(context);
-      createAlertDialogCustom(context,'Success!','A reminder has been set for the selected workout plan. Head over to the Notifications Tab if you wish to view/delete the current workout plan reminder.', NetworkImage('https://static.wixstatic.com/media/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png/v1/fill/w_300,h_297/6387f1_04ed003331da4d0193f3e47d597389a1~mv2.png'));
+      createAlertDialogCustom(context,'Success!','A reminder has been set for the selected workout plan. Head over to the Notifications Tab if you wish to view/delete the current workout plan reminder.', AssetImage('assets/check.png'));
 
     });
     super.initState();
