@@ -8,6 +8,8 @@ import 'package:diabetes_app/profile/profile_notifier.dart';
 import 'package:diabetes_app/quiz.dart';
 import 'package:diabetes_app/quiz_api.dart';
 import 'package:diabetes_app/quiz_notifier.dart';
+import 'package:diabetes_app/reward.dart';
+import 'package:diabetes_app/reward_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +21,7 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   String selectedAnswer = '';
   Quiz randomQuestion = Quiz();
+  Reward newReward = Reward();
 
   @override
   void initState() {
@@ -32,6 +35,7 @@ class _QuizScreenState extends State<QuizScreen> {
     ProfileNotifier profileNotifier =
     Provider.of<ProfileNotifier>(context, listen: false);
     getProfile(profileNotifier,authNotifier.user.email);
+
 
     super.initState();
   }
@@ -52,10 +56,25 @@ class _QuizScreenState extends State<QuizScreen> {
 
     if (selectedAnswer==randomQuestion.correctAnswer)
       {
-        profileNotifier.currentProfile.quizScore = profileNotifier.currentProfile.quizScore + 10;
-        uploadProfile(profileNotifier.currentProfile, true, onProfileUploaded);
 
         createAlertDialogCustom(context, 'Correct', 'Your answer is correct, well done!', AssetImage('assets/check.png'));
+
+        profileNotifier.currentProfile?.quizScore = profileNotifier.currentProfile?.quizScore + 10;
+
+        if(profileNotifier.currentProfile?.quizScore==1000)
+        {
+          newReward.rewardName='Diploma of Diabetes Awareness';
+          newReward.userEmail = profileNotifier.currentProfile.email;
+          newReward.userName = profileNotifier.currentProfile.name;
+          uploadReward(newReward);
+          profileNotifier.currentProfile?.quizScore=profileNotifier.currentProfile?.quizScore+10;
+
+          createAlertDialogCustom(context, 'Congratulations', 'You have reached 1000 points and have been awarded a Diploma of Diabetes Awareness. You can expect this in your email within 48 hours!', AssetImage('assets/diploma4.png'));
+
+        }
+
+        uploadProfile(profileNotifier.currentProfile, true, onProfileUploaded);
+
 
       }else
         {
@@ -230,7 +249,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       height: 30,
                     ),
                     Text(
-                      'Test your knowledge about diabetes in this fantastic quiz aimed to raise awareness of the disease and practices benefiting pacients diagnosed of diabetes.',
+                      'Test your knowledge about diabetes in this fantastic quiz aimed to raise awareness of the disease. Gather 1000 points and you will be rewarded a Diploma of Diabetes Awareness.',
                       style: TextStyle(
                         fontSize: 14.0,
                       ),
@@ -294,7 +313,7 @@ class _QuizScreenState extends State<QuizScreen> {
                               fontWeight: FontWeight.w700
                           ),
                         ),
-                        
+
                         SizedBox(height: 5,),
                         Text(
                           '○ and many more...',

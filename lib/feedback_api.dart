@@ -22,7 +22,7 @@ uploadFeedback(FeedbackModel feedback) async{
 
 }
 
-updateRecord(FeedbackModel feedback) async{
+updateFeedback(FeedbackModel feedback) async{
 
   CollectionReference medicineRef =  await Firestore.instance.collection('Feedback');
   await medicineRef.document(feedback.id).updateData(feedback.toMap());
