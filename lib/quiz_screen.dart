@@ -288,6 +288,15 @@ class _QuizScreenState extends State<QuizScreen> {
                         ),
                         SizedBox(height: 5,),
                         Text(
+                          '○ Self-management and treatment',
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w700
+                          ),
+                        ),
+                        
+                        SizedBox(height: 5,),
+                        Text(
                           '○ and many more...',
                           style: TextStyle(
                               fontSize: 15.0,
