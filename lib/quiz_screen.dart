@@ -228,7 +228,13 @@ class _QuizScreenState extends State<QuizScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Diabetes Quiz'),
+        backgroundColor: Colors.white.withOpacity(0.0),
+        iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0.0,
+        title: Text(
+          'Diabetes Quiz',
+          style: TextStyle(color: Colors.blue),
+        ),
       ),
       body: SingleChildScrollView(
         child: Center(

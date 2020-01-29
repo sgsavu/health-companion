@@ -20,6 +20,16 @@ class MedicineDetail extends StatelessWidget{
 
     return Scaffold(
 
+      appBar: AppBar(
+        backgroundColor: Colors.white.withOpacity(0.0),
+        iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0.0,
+        title: Text(
+          'Details',
+          style: TextStyle(color: Colors.blue),
+        ),
+      ),
+
       body:
       SingleChildScrollView(
         child: Center(
@@ -30,8 +40,8 @@ class MedicineDetail extends StatelessWidget{
                   medicineNotifier.currentMedicine.image != null
                       ? medicineNotifier.currentMedicine.image
                       : 'https://www.afd.fr/sites/afd/files/styles/visuel_principal/public/2019-10-09-27-46/flickr-marco-verch.jpg?itok=XH4x7-Y4',
-                  fit: BoxFit.fitWidth,),
-                SizedBox(height: 32,),
+                  ),
+                SizedBox(height: 5,),
                 Text(medicineNotifier.currentMedicine.name,
                   style: TextStyle(fontSize: 40),),
                 Text(medicineNotifier.currentMedicine.category,style: TextStyle(
@@ -39,8 +49,14 @@ class MedicineDetail extends StatelessWidget{
                   fontStyle: FontStyle.italic,
 
                 ),),
+                SizedBox(height: 5,),
+                Text(medicineNotifier.currentMedicine.intake,style: TextStyle(
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+
+                ),),
                 Container(
-                  padding: EdgeInsets.only(left: 10.0, top: 20.0, right: 10.0, bottom: 20.0),
+                  padding: EdgeInsets.only(left: 20.0, top: 20.0, right: 10.0, bottom: 20.0),
                   child:Text(medicineNotifier.currentMedicine.description, style: TextStyle(
                     fontStyle: FontStyle.normal,
                     fontSize: 15,

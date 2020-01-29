@@ -79,10 +79,14 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget build(BuildContext context) {
     return loading?Loading():Scaffold(
       appBar: AppBar(
-            backgroundColor: Colors.white.withOpacity(0.0),
-            iconTheme: IconThemeData(color: Colors.black),
-            elevation: 0.0,
-          ),
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          'Reset Password',
+          style: TextStyle(color: Colors.blue),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Container(

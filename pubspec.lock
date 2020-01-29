@@ -71,6 +71,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.3"
+  curved_navigation_bar:
+    dependency: "direct main"
+    description:
+      name: curved_navigation_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1"
   firebase:
     dependency: "direct main"
     description:
@@ -308,6 +315,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.11"
+  titled_navigation_bar:
+    dependency: "direct main"
+    description:
+      name: titled_navigation_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.6.0"
   typed_data:
     dependency: transitive
     description:

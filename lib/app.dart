@@ -1,9 +1,11 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:diabetes_app/diet/diet_tab.dart';
 import 'package:diabetes_app/exercises/exercise_tab.dart';
 import 'package:diabetes_app/record/home_tab.dart';
 import 'package:diabetes_app/medicine/medicine_tab.dart';
 import 'package:diabetes_app/notifications/notifications_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 
 
@@ -34,38 +36,21 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
     return Scaffold(
         body: tabs[_currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          type: BottomNavigationBarType.fixed,
-          unselectedFontSize: 11,
-          selectedFontSize: 13,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.local_hospital),
-                title: Text('Medicine'),
-                backgroundColor: Colors.red),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.restaurant),
-                title: Text('Diet'),
-                backgroundColor: Colors.deepOrange),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                title: Text('Home'),
-                backgroundColor: Colors.blue),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.accessibility_new),
-                title: Text('Exercise'),
-                backgroundColor: Colors.green),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.message),
-                title: Text('Notifications',style: TextStyle(fontSize: 12.5),),
-                backgroundColor: Colors.purple),
-          ],
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
+        bottomNavigationBar: TitledBottomNavigationBar(
+          reverse: true,
+            currentIndex: _currentIndex, // Use this to update the Bar giving a position
+            onTap: (index){
+              setState(() {
+                _currentIndex=index;
+              });
+            },
+            items: [
+              TitledNavigationBarItem(title: 'Medicine', icon: Icons.local_hospital),
+              TitledNavigationBarItem(title: 'Meals', icon: Icons.fastfood),
+              TitledNavigationBarItem(title: 'Home', icon: Icons.home),
+              TitledNavigationBarItem(title: 'Exercise', icon: Icons.accessibility_new),
+              TitledNavigationBarItem(title: 'Notify', icon: Icons.notifications),
+            ]
         )
     );
   }

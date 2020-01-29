@@ -46,7 +46,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       validator: (String value) {
 
 
-
+        if (value.isNotEmpty) {
+          if (value.length<10) {
+            return 'Message needs to be longer than 10 characters';
+          }
+        }
 
         return null;
       },
@@ -95,6 +99,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             backgroundColor: Colors.white.withOpacity(0.0),
             iconTheme: IconThemeData(color: Colors.black),
             elevation: 0.0,
+        title: Text(
+          'Feedback',
+          style: TextStyle(color: Colors.blue),
+        ),
           ),
       body: SingleChildScrollView(
         child: Center(
