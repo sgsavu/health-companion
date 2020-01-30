@@ -38,7 +38,7 @@ uploadProfileAndImage(Profile profile, bool isUpdating, File localFile, Function
 
     var uuid = Uuid().v4();
 
-    if(profile.image!=""){
+    if(profile.image!="https://www.sackettwaconia.com/wp-content/uploads/default-profile.png"){
       StorageReference storageReference = await FirebaseStorage.instance.getReferenceFromUrl(profile.image);
 
       print(storageReference.path);

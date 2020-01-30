@@ -1,4 +1,3 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:diabetes_app/diet/diet_tab.dart';
 import 'package:diabetes_app/exercises/exercise_tab.dart';
 import 'package:diabetes_app/record/home_tab.dart';
