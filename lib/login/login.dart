@@ -288,12 +288,9 @@ class _LoginState extends State<Login> {
                     padding: EdgeInsets.fromLTRB(32, 50, 32, 15),
                     child: Column(
                       children: <Widget>[
-                        FadeInImage.assetNetwork(
-                          height: 100,
-                          placeholder: 'assets/giphy.gif',
-                          image:
-                              'https://lions108la.it/wp-content/uploads/2019/09/LCI_CauseArea_Icons_01a-diabetes1-1-1024x1024.png',
-                          imageScale: 10,
+                        CircleAvatar(
+                          maxRadius: MediaQuery.of(context).size.height/8,
+                          backgroundImage: AssetImage('assets/vitamin.png'),
                         ),
                         SizedBox(
                           height: 20.0,
